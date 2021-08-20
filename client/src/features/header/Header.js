@@ -37,23 +37,6 @@ const Header = () => {
             hidePlus()
         }
     }
-    
-    const outsideClick = (event, elem) => {
-        console.log(event.target)
-        console.log(elem)
-        return event.target !== elem &&
-            event.target !== document.querySelector('.header__account__btnPlus') &&
-            event.target !== document.querySelector('.header__account__btnPlus__iconPlus');
-
-    }
-
-    document.addEventListener('click', (event)=>{
-        event.preventDefault()
-        const plusElem = document.querySelector('.header__plus')
-        if(outsideClick(event, plusElem)){
-            hidePlus()
-        }
-    })
 
     return (
         <div className={'header'}>
@@ -65,7 +48,6 @@ const Header = () => {
                 </div>
             </div>
             <div className={'header__nav'}>
-                {/*<div className={'header__nav__containerIcon'}></div>*/}
                 <HomeIcon className={'header__nav__icon'} color={'primary'} fontSize={'medium'}/>
                 <OndemandVideoIcon className={'header__nav__icon'} color={'primary'} fontSize={'medium'}/>
                 <StorefrontIcon className={'header__nav__icon'} color={'primary'} fontSize={'medium'}/>
