@@ -1,0 +1,12 @@
+import mongoose from 'mongoose'
+
+const postModel = mongoose.Schema({
+    user: String,
+    imgName: String,
+    text: String,
+    avatar: String,
+    timestamp: String
+})
+
+// 1st param : name of collection
+export default mongoose.model('posts', postModel)

@@ -1,0 +1,121 @@
+.header{
+    width: 100%;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+/* HEADER SEARCH */
+.header__search{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.header__search__img{
+    width: 40px;
+}
+.header__search__barSearch{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: center;
+}
+.header__search__barSearch__icon{
+    position: absolute;
+    align-self: flex-start;
+    z-index: 1;
+}
+.header__search__barSearch__input{
+    padding-left: 30px;
+    background-color: #F0F2F5;
+}
+
+/* HEADER NAVIGATION */
+.header__nav{
+    padding: 5px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.header__nav__icon{
+    padding: 10px 30px !important;
+    transition: 0.5s;
+    position: relative;
+}
+.header__nav__icon:hover{
+    cursor: pointer;
+    background-color: #F0F2F5;
+}
+
+/* HEADER ACCOUNT */
+.header__account{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.header__account__user{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.header__account__user__avatar{
+    margin-right: 10px;
+}
+.header__account__btn{
+    padding: 5px;
+    border-radius: 50%;
+    background-color: #F0F2F5 !important;
+    margin: 0 5px !important;
+}
+.header__account__btn:hover{
+    cursor: pointer;
+}
+.header__account__btn__icon{
+    /*pointer-events: none;*/
+}
+
+/* HEADER PLUS */
+.header__plus{
+    position: absolute;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    right: 20px;
+    bottom: -310%;
+    width: 200px;
+    padding: 8px;
+    display: none;
+    flex-direction: column;
+}
+.header__plus__btn{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 0;
+}
+.header__plus__btn:hover{
+    background-color: #F0F2F5;
+    cursor: pointer;
+}
+.header__plus__btn__icon{
+    margin-right: 10px;
+}
+.header__plus__profile{
+    border-bottom: 1px solid lightgrey;
+}
+.header__plus__profile__text{
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.header__plus__profile__text__placeholder{
+    font-weight: lighter;
+    font-size: 0.8rem;
+}
+
+/* TREATMENT */
+.open{
+    display: flex;
+}
