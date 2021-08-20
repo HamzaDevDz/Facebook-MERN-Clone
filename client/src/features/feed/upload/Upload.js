@@ -7,10 +7,10 @@ import ImageIcon from '@material-ui/icons/Image';
 import MoodIcon from '@material-ui/icons/Mood';
 
 export const Upload = () => {
+
     const [caption, setCaption] = useState('')
     const [video, setVideo] = useState(undefined)
     const [image, setImage] = useState(undefined)
-    // const [mood, setMood] = useState(undefined)
 
     return (
         <form className={'feed__upload'}>

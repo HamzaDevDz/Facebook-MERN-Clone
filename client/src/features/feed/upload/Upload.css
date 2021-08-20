@@ -16,6 +16,7 @@
 .feed__upload__caption__input{
     flex: 1;
     margin-left: 10px !important;
+    border-radius: 25px !important;
 }
 /* MULTIMEDIA */
 .feed__upload__multi{
@@ -33,7 +34,7 @@
     flex-direction: row;
     align-items: center;
     padding: 5px 20px;
-    border-radius: 5px;
+    border-radius: 25px;
 }
 .feed__upload__multi__label:hover{
     background-color: lightgrey;
