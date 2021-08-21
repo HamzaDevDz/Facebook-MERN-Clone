@@ -8,6 +8,7 @@ const initialState = {
             username: 'Hamza Hamdoud',
             timestamp: '20:08:2021:00:00:00',
             caption: 'Golf 6 Match 2',
+            imgPostURL: 'hamza.jpg',
             comments:[{
                 imgUserURL: 'hamza.jpg',
                 username: 'Hamza Hamdoud',
