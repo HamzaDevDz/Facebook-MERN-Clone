@@ -8,12 +8,11 @@ export const Posts = ({refDoc, imgUserURL, username, timestamp, caption, imgPost
 
     const posts = useSelector(selectPosts)
 
-    console.log(posts)
-
     return (
         <div className={'feed__posts'}>
             {posts.map(({id, imgUserURL, username, timestamp, caption, imgPostURL, comments, likes})=>(
-                <Post refDoc={id}
+                <Post idPost={id}
+                      key={id}
                       imgUserURL={imgUserURL}
                       username={username}
                       timestamp={timestamp}

@@ -1,10 +1,35 @@
-import React from "react"
+import React, {useEffect} from "react"
 import './Post.css'
 import Avatar from "@material-ui/core/Avatar";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import CommentIcon from '@material-ui/icons/Comment';
+import {useDispatch} from "react-redux";
+import {setLikesPostById} from "./postsSlice";
 
-export const Post = ({refDoc, imgUserURL, username, timestamp, caption, imgPostURL, comments, likes}) => {
+export const Post = ({idPost, imgUserURL, username, timestamp, caption, imgPostURL, likes, comments}) => {
+
+    const dispatch = useDispatch()
+    const currentUsername = 'HamzaHamdoud'
+
+    console.log(Date.now())
+
+    useEffect(()=>{
+        if(likes.includes(currentUsername)){
+            document.querySelector('.feed__posts__post__states__likes__icon').style.color = 'blue'
+        }
+        else{
+            document.querySelector('.feed__posts__post__states__likes__icon').style.color = 'black'
+        }
+    }, [likes])
+
+    const hanldeLikePost = () => {
+        dispatch(setLikesPostById(idPost, currentUsername))
+    }
+
+    const handleLikeComment = () => {
+        dispatch()
+    }
+
     return (
         <div className={'feed__posts__post'}>
             <div className={'feed__posts__post__head'}>
@@ -24,8 +49,10 @@ export const Post = ({refDoc, imgUserURL, username, timestamp, caption, imgPostU
                     ''
             }
             <div className={'feed__posts__post__states'}>
-                <div className={'feed__posts__post__states__likes'}>
-                    <ThumbUpAltIcon className={'feed__posts__post__states__likes__icon'} color={'primary'}/>{likes}
+                <div className={'feed__posts__post__states__likes'}
+                     onClick={hanldeLikePost}
+                >
+                    <ThumbUpAltIcon className={'feed__posts__post__states__likes__icon'}/>{likes.length}
                 </div>
                 <div className={'feed__posts__post__states__comments'}>
                     <CommentIcon className={'feed__posts__post__states__comments__icon'} color={'action'} />{comments.length}
@@ -35,14 +62,17 @@ export const Post = ({refDoc, imgUserURL, username, timestamp, caption, imgPostU
                 comments.length !== 0 ?
                     <div className={'feed__posts__post__comments'}>
                         {comments.map(comment=>(
-                            <div className={'feed__posts__post__comments__comment'}>
+                            <div key={comment.idComment} className={'feed__posts__post__comments__comment'}>
                                 <Avatar className={'feed__posts__post__comments__comment__avatar'} alt={comment.username[0]} src={comment.imgUserURL} />
                                 <div className={'feed__posts__post__comments__comment__userAndTextAndStates'}>
                                     <strong className={'feed__posts__post__comments__comment__userAndTextAndStates__user'}>{comment.username}</strong>
                                     <p className={'feed__posts__post__comments__comment__userAndTextAndStates__text'}>{comment.text}</p>
                                     <div className={'feed__posts__post__comments__comment__userAndTextAndStates__states'}>
-                                        <div className={'feed__posts__post__comments__comment__userAndTextAndStates__states__likes'}>
-                                            <ThumbUpAltIcon className={'feed__posts__post__comments__comment__userAndTextAndStates__states__likes__icon'} color={'primary'} fontSize={'small'}/>{comment.likes}
+                                        <div className={'feed__posts__post__comments__comment__userAndTextAndStates__states__likes'}
+                                             onClick={handleLikeComment}
+                                        >
+                                            <ThumbUpAltIcon className={'feed__posts__post__comments__comment__userAndTextAndStates__states__likes__icon'} fontSize={'small'}/>
+                                            {comment.likes.length}
                                         </div>
                                         <div className={'feed__posts__post__comments__comment__userAndTextAndStates__states__timestamp'}>
                                             {comment.timestamp}
