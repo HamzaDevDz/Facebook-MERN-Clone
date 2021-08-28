@@ -1,9 +1,26 @@
 .sidebar{
     display: flex;
     flex-direction: column;
-    padding: 20px;
     background-color: #FFFFFF;
     position: fixed;
     left: 0;
-    top: 50px;
+    top: 70px;
+    padding: 0 10px 0 10px;
+}
+.sidebar__point, .sidebar__user{
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.sidebar__point:hover{
+    cursor: pointer;
+    background-color: #F0F2F5;
+}
+.sidebar__user{
+    justify-content: space-evenly;
+    border-bottom: 1px solid lightgrey;
+}
+.sidebar__point__icon{
+    margin-right: 10px;
 }

@@ -14,18 +14,21 @@ import IconButton from "@material-ui/core/IconButton";
 
 const Header = () => {
 
+    const user = {username:'HamzaHamdoud', name:'Hamza', fname:'Hamdoud', imgUserURL:'hamza.jpg'}
+
     const [openPlus, setOpenPlus] = useState(false)
 
     const hidePlus = () => {
         document.querySelector('.header__plus').classList.remove('open')
         setOpenPlus(false)
         document.querySelector('.header__account__btnPlus__iconPlus').style.color = '#6E6F70'
+        window.removeEventListener('click', eventListnerBox)
     }
-
     const showPlus = () => {
         document.querySelector('.header__plus').classList.add('open')
         setOpenPlus(true)
         document.querySelector('.header__account__btnPlus__iconPlus').style.color = 'blue'
+        window.addEventListener('click', eventListnerBox)
     }
 
     const handleOpenPlus = (e) => {
@@ -33,6 +36,14 @@ const Header = () => {
             showPlus()
         }
         else{
+            hidePlus()
+        }
+    }
+
+    const eventListnerBox = (e) => {
+        const box = document.querySelector('.header__plus')
+        const btn = document.querySelector('.header__account__btnPlus')
+        if(e.target !== box && e.target !== btn && !box.contains(e.target) && !btn.contains(e.target)){
             hidePlus()
         }
     }
@@ -49,14 +60,21 @@ const Header = () => {
                 </div>
             </div>
             <div className={'header__nav'}>
-                <HomeIcon className={'header__nav__icon'} color={'primary'} fontSize={'medium'}/>
-                <OndemandVideoIcon className={'header__nav__icon'} color={'primary'} fontSize={'medium'}/>
-                <StorefrontIcon className={'header__nav__icon'} color={'primary'} fontSize={'medium'}/>
+                <div className={'header__nav__btn header__nav__home selected'}>
+                    <HomeIcon className={'header__nav__btn__icon'} color={'primary'} fontSize={'medium'}/>
+                    <span></span>
+                </div>
+                <div className={'header__nav__btn header__nav__video'}>
+                    <OndemandVideoIcon className={'header__nav__btn__icon'} color={'primary'} fontSize={'medium'}/>
+                </div>
+                <div className={'header__nav__btn header__nav__marketplace'}>
+                    <StorefrontIcon className={'header__nav__btn__icon'} color={'primary'} fontSize={'medium'}/>
+                </div>
             </div>
             <div className={'header__account'}>
                 <div className={'header__account__user'}>
-                    <Avatar className={'header__account__user__avatar'} alt="H" src="hamza.jpg" />
-                    <strong>Hamza Hamdoud</strong>
+                    <Avatar className={'header__account__user__avatar'} alt={user.username[0]} src={user.imgUserURL} />
+                    <strong>{user.fname} {user.name}</strong>
                 </div>
                 <IconButton className={'header__account__btn header__account__btnChat'}>
                     <ChatIcon className={'header__account__btn__icon'} fontSize={'small'} color="action"/>
