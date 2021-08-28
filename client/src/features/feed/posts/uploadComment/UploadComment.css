@@ -1,0 +1,20 @@
+/* UPLOAD COMMENT */
+.feed__posts__post__uploadComment{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 98%;
+}
+.feed__posts__post__uploadComment__avatar{
+    margin-right: 10px;
+}
+.feed__posts__post__uploadComment__input{
+    flex: 1;
+    border-radius: 25px;
+    background-color: #F0F2F5;
+    padding: 10px;
+    font-size: 0.8rem !important;
+}
+.feed__posts__post__uploadComment__input::before, .feed__posts__post__uploadComment__input::after{
+    width: 0;
+}

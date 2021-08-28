@@ -27,9 +27,12 @@
     position: absolute;
     align-self: flex-start;
     z-index: 1;
+    transform: translateX(5px);
 }
 .header__search__barSearch__input{
-    padding-left: 30px;
+    padding: 10px 10px 10px 30px;
+    outline: none;
+    border: none;
     background-color: #F0F2F5;
     border-radius: 25px;
 }

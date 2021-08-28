@@ -3,7 +3,6 @@ import './Header.css'
 import HomeIcon from '@material-ui/icons/Home';
 import OndemandVideoIcon from '@material-ui/icons/OndemandVideo';
 import StorefrontIcon from '@material-ui/icons/Storefront';
-import Input from "@material-ui/core/Input";
 import SearchIcon from '@material-ui/icons/Search';
 import Avatar from "@material-ui/core/Avatar";
 import ChatIcon from '@material-ui/icons/Chat';
@@ -44,7 +43,9 @@ const Header = () => {
                 <img className={'header__search__img'} src={'icons/facebook_icon.png'} alt={''} />
                 <div className={'header__search__barSearch'}>
                     <SearchIcon className={'header__search__barSearch__icon'} fontSize="medium" color="action"/>
-                    <Input className={'header__search__barSearch__input'} placeholder="Search"/>
+                    <input className={'header__search__barSearch__input'} placeholder="Search"
+                           type={'text'}
+                    />
                 </div>
             </div>
             <div className={'header__nav'}>

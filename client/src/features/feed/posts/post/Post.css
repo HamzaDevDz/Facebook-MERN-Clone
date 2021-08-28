@@ -45,36 +45,6 @@
     align-items: center;
 }
 /* COMMENTS */
-.feed__posts__post__comments{
-    width: 98%;
-    display: flex;
-    flex-direction: column;
-}
-.feed__posts__post__comments__comment{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.feed__posts__post__comments__comment__avatar{
-    margin-right: 10px;
-}
-.feed__posts__post__comments__comment__userAndTextAndStates{
-    display: flex;
-    flex-direction: column;
-    background-color: #F0F2F5;
-    padding: 10px;
-    border-radius: 25px;
-}
-.feed__posts__post__comments__comment__userAndTextAndStates__text{
-    margin: 5px 0;
-}
-.feed__posts__post__comments__comment__userAndTextAndStates__states{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-size: 0.8rem;
-}
-.feed__posts__post__comments__comment__userAndTextAndStates__states__likes{
-    margin-right: 10px;
+.feed__posts__post__states__likes *, .feed__posts__post__states__comments *{
+    pointer-events: none;
 }
