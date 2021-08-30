@@ -1,0 +1,34 @@
+.login{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*background-color: #FFFFFF;*/
+    /*justify-content: space-evenly;*/
+    position: relative;
+    width: 100%;
+    background-color: #FFFFFF;
+}
+.login__img{
+    width: 250px;
+    margin: 20px 0;
+}
+.login__form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+}
+.login__form__password{
+    margin: 20px 0 !important;
+}
+.login__form__username, .login__form__password{
+    background-color: #F0F2F5;
+    width: 100%;
+}
+.login__form__btn{
+    width: 100%;
+}
+.login__signUp{
+    margin-top: 10px !important;
+}

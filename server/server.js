@@ -8,7 +8,8 @@ import Grid from 'gridfs-stream'
 import bodyParser from "body-parser"
 import path from 'path'
 import Pusher from "pusher"
-import mongoPosts from "./mongoPosts";
+import mongoPosts from "./schemas/mongoPosts.js";
+import mongoUsers from "./schemas/mongoUsers.js";
 
 Grid.mongo = mongoose.mongo
 
@@ -108,6 +109,31 @@ app.get('/retrieve/posts', (req, res)=>{
                 return a.timestamp - b.timestamp
             })
             res.status(200).send(data)
+        }
+    })
+})
+
+app.post('/upload/user', (req, res) => {
+    const dbUser = req.body
+    console.log(dbUser)
+    mongoUsers.create(dbUser, (err, data) => {
+        if(err){
+            res.status(500).send(err)
+        }
+        else{
+            res.status(201).send(data)
+        }
+    })
+})
+
+app.get('/retrieve/user', (req, res)=>{
+    mongoUsers.find((err, data)=>{
+        if(err){
+            res.status(500).send(err)
+        }
+        else{
+            console.log(data)
+            res.status(201).send(data)
         }
     })
 })

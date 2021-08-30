@@ -1,0 +1,33 @@
+.signUp{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.signUp__img{
+    width: 200px;
+    margin: 10px 0;
+}
+.signUp__form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.signUp__form__input{
+    margin-bottom: 10px !important;
+}
+.signUp__form__name, .signUp__form__meta{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.signUp__form__login{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*width: 300px;*/
+}
+.signUp__form__btn{
+    margin-bottom: 10px !important;
+}
