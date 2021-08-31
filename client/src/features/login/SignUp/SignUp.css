@@ -16,18 +16,16 @@
 }
 .signUp__form__input{
     margin-bottom: 10px !important;
+    width: 600px;
 }
-.signUp__form__name, .signUp__form__meta{
+.signUp__form__label{
     display: flex;
     flex-direction: row;
     align-items: center;
 }
-.signUp__form__login{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /*width: 300px;*/
-}
 .signUp__form__btn{
     margin-bottom: 10px !important;
+}
+.signUp__form__label__img{
+    width: 200px;
 }

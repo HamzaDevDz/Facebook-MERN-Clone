@@ -11,6 +11,11 @@ export const Login = () => {
 
     const history = useHistory()
 
+    const handleLogin = (e) => {
+        e.preventDefault()
+
+    }
+
     return(
         <div className={'login'}>
             <img src={'fb_img.png'} alt={''} className={'login__img'} />
@@ -28,6 +33,7 @@ export const Login = () => {
                 />
                 <Button variant="contained" color="primary"
                         className={'login__form__btn'}
+                        onClick={handleLogin}
                 >
                     Login
                 </Button>

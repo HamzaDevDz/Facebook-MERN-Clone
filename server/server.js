@@ -65,8 +65,9 @@ const upload = multer({ storage })
 app.get('/', (req, res)=>res.status(200).send('Hello world'))
 
 app.post('/upload/image', upload.single('file'), (req, res)=>{
-    console.log('Upload success')
+    // console.log(req.file)
     res.status(201).send(req.file)
+    console.log('Upload success')
 })
 
 app.post('/upload/post', (req, res)=>{
@@ -115,7 +116,6 @@ app.get('/retrieve/posts', (req, res)=>{
 
 app.post('/upload/user', (req, res) => {
     const dbUser = req.body
-    console.log(dbUser)
     mongoUsers.create(dbUser, (err, data) => {
         if(err){
             res.status(500).send(err)
@@ -132,7 +132,6 @@ app.get('/retrieve/user', (req, res)=>{
             res.status(500).send(err)
         }
         else{
-            console.log(data)
             res.status(201).send(data)
         }
     })

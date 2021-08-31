@@ -1,1 +1,1 @@
-export const ServerInstanceAddress = 'localhost:9000'
+export const ServerInstanceAddress = 'http://localhost:9000'
