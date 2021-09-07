@@ -126,13 +126,22 @@ app.post('/upload/user', (req, res) => {
     })
 })
 
-app.get('/retrieve/user', (req, res)=>{
-    mongoUsers.find((err, data)=>{
+app.post('/retrieve/user', (req, res)=>{
+    // console.log(req)
+    mongoUsers.findOne({username: req.body.username},(err, data)=>{
         if(err){
             res.status(500).send(err)
         }
         else{
-            res.status(201).send(data)
+            if(!data || data.length === 0){
+                res.status(404).json({err: 'User not found'})
+            }
+            else{
+                if(data.password !== req.body.password){
+                    res.status(403).json({err: 'Incorrect password'})
+                }
+                res.status(200).send(data)
+            }
         }
     })
 })

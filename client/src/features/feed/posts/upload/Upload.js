@@ -5,7 +5,6 @@ import VideoCallIcon from '@material-ui/icons/VideoCall';
 import ImageIcon from '@material-ui/icons/Image';
 import MoodIcon from '@material-ui/icons/Mood';
 import {useDispatch} from "react-redux";
-import {addPost} from "../postsSlice";
 
 export const Upload = () => {
 

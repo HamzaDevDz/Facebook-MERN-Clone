@@ -23,29 +23,17 @@ export const SignUp = () => {
     const history = useHistory()
     const dispatch = useDispatch()
 
-    async function uploadImage(image) {
-        try{
-            const response = await axios.post(ServerInstanceAddress+'/upload/image', image.name).then((res)=>{
-                console.log(res.data)
-                return res.data
-            })
-            console.log(response)
-        } catch (e) {
-            console.log(e.message)
-        }
-    }
-
     const handleSignUp = (e) => {
         e.preventDefault()
         if(name && firstName && username && password && passwordConfirm){
             if(password === passwordConfirm){
                 if(image){
-                    console.log(image)
+                    // console.log(image)
                     const formData = new FormData()
                     formData.append('file', image)
                     axios.post(ServerInstanceAddress+'/upload/image', formData).then((res)=>{
                         setImgUserName(res.data.filename)
-                        const user = {
+                        const newUser = {
                             name: name.toUpperCase(),
                             firstName,
                             email: email ? email : '',
@@ -54,7 +42,8 @@ export const SignUp = () => {
                             username: username.toLowerCase(),
                             password
                         }
-                        dispatch(uploadUser(user))
+                        // console.log(newUser)
+                        dispatch(uploadUser(newUser))
                         setName('')
                         setFirstName('')
                         setEmail('')

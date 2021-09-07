@@ -3,7 +3,8 @@ import {ServerInstanceAddress} from "../../ServerInstance";
 import axios from "axios";
 
 const initialState = {
-    user: undefined
+    user: null,
+    err: ''
 }
 
 export const uploadUser = createAsyncThunk(
@@ -17,11 +18,15 @@ export const uploadUser = createAsyncThunk(
     })
 
 export const retrieveUser = createAsyncThunk(
-    'retrieve/user',
+    '/retrieve/user',
     async (user, thunkAPI) => {
         try {
-            await axios.post(ServerInstanceAddress+"/retrieve/user", user)
+            const response = await axios.post(ServerInstanceAddress+"/retrieve/user", user).then((res)=>{
+                return res.data
+            })
+            return response
         } catch (error) {
+            // console.log(error.response.status)
             return thunkAPI.rejectWithValue({ error: error.message });
         }
     })
@@ -38,10 +43,18 @@ export const loginSlice = createSlice({
         // RETRIEVE USER
         [retrieveUser.fulfilled]: (state, action) => {
             state.user = action.payload
+        },
+        [retrieveUser.rejected]: (state, action) => {
+            const messageError = action.payload.error.split(' ')
+            const codeError = messageError[messageError.length - 1]
+            state.err = parseInt(codeError)
         }
     }
 })
 
 // export const {} = loginSlice.actions
+
+export const selectUser = (state) => state.login.user
+export const selectErr = (state) => state.login.err
 
 export default loginSlice.reducer
