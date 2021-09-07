@@ -29,6 +29,9 @@
 .login__form__btn{
     width: 100%;
 }
+.login__form__error{
+    margin-bottom: 20px !important;
+}
 .login__signUp{
     margin-top: 10px !important;
 }

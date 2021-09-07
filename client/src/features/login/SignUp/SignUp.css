@@ -13,6 +13,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 .signUp__form__input{
     margin-bottom: 10px !important;
@@ -28,4 +29,10 @@
 }
 .signUp__form__label__img{
     width: 200px;
+}
+.signUp__form__label{
+
+}
+.signUp__form__label__icon{
+    margin-right: 10px !important;
 }

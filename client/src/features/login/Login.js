@@ -4,7 +4,9 @@ import './Login.css'
 import TextField from "@material-ui/core/TextField"
 import {useHistory} from "react-router-dom"
 import {useDispatch, useSelector} from "react-redux";
-import {retrieveUser, selectErr, selectUser} from "./loginSlice";
+import {resetError, retrieveUser, selectErr, selectUser} from "./loginSlice";
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from "@material-ui/lab/AlertTitle";
 
 export const Login = () => {
 
@@ -20,25 +22,34 @@ export const Login = () => {
     const err = useSelector(selectErr)
 
     useEffect(()=>{
+        document.querySelector('.login__form__error').style.display = 'none'
+    },[])
+
+    useEffect(()=>{
         if(user !== null){
             history.push("/home")
         }
     }, [user])
 
     useEffect(()=>{
-        switch (err) {
-            case 500:
-                setError('Internal Server Error')
-                break
-            case 404:
-                setError('Username not found')
-                break
-            default:
-                setError('Incorrect password')
+        if(err !== null){
+            document.querySelector('.login__form__error').style.display = 'flex'
+            switch (err) {
+                case 500:
+                    setError('Internal Server Error')
+                    break
+                case 404:
+                    setError('Username not found')
+                    break
+                default:
+                    setError('Incorrect password')
+            }
+            setTimeout(()=>{
+                document.querySelector('.login__form__error').style.display = 'none'
+                setError('')
+                dispatch(resetError())
+            }, 5000)
         }
-        setTimeout(()=>{
-            setError('')
-        }, 5000)
     }, [err])
 
     const handleLogin = (e) => {
@@ -69,12 +80,14 @@ export const Login = () => {
                            value={password}
                            onChange={e=>setPassword(e.target.value)}
                 />
-                <p className={'login__form__error'}>
+                <Alert severity="error" className={'login__form__error'}>
+                    <AlertTitle>Error</AlertTitle>
                     {error}
-                </p>
+                </Alert>
                 <Button variant="contained" color="primary"
                         className={'login__form__btn'}
                         onClick={handleLogin}
+                        disabled={!username || !password}
                 >
                     Login
                 </Button>

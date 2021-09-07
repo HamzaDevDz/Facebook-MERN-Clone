@@ -11,10 +11,18 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 import IconButton from "@material-ui/core/IconButton";
+import {useDispatch, useSelector} from "react-redux";
+import {selectUser} from "../login/loginSlice";
+import axios from "axios";
+import {ServerInstanceAddress} from "../../ServerInstance";
 
 const Header = () => {
 
-    const user = {username:'HamzaHamdoud', name:'Hamza', fname:'Hamdoud', imgUserURL:'hamza.jpg'}
+    // const user = {username:'HamzaHamdoud', name:'Hamza', fname:'Hamdoud', imgUserURL:'hamza.jpg'}
+
+    const user = useSelector(selectUser)
+
+    const dispatch = useDispatch()
 
     const [openPlus, setOpenPlus] = useState(false)
 
@@ -48,6 +56,18 @@ const Header = () => {
         }
     }
 
+    const retrieveImage = (filename) => {
+        const response = axios.get(ServerInstanceAddress + 'retrieve/image/single', {
+            params : {
+                filename : filename
+            }
+        }).then( res => {
+            return res.data
+        })
+        console.log(response)
+        return response
+    }
+
     return (
         <div className={'header'}>
             <div className={'header__search'}>
@@ -73,8 +93,10 @@ const Header = () => {
             </div>
             <div className={'header__account'}>
                 <div className={'header__account__user'}>
-                    <Avatar className={'header__account__user__avatar'} alt={user.username[0]} src={user.imgUserURL} />
-                    <strong>{user.fname} {user.name}</strong>
+                    <Avatar className={'header__account__user__avatar'} alt={user.username[0]}
+                            src={dispatch(retrieveImage(user.imgUserName))}
+                    />
+                    <strong>{user.firstName} {user.name}</strong>
                 </div>
                 <IconButton className={'header__account__btn header__account__btnChat'}>
                     <ChatIcon className={'header__account__btn__icon'} fontSize={'small'} color="action"/>

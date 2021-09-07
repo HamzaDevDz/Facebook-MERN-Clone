@@ -84,7 +84,7 @@ app.post('/upload/post', (req, res)=>{
 })
 
 app.get('/retrieve/image/single', (req, res)=>{
-    gfs.files.findOne({filename: req.query.name}, (err, file)=>{
+    gfs.files.findOne({filename: req.query.filename}, (err, file)=>{
         if(err){
             res.status(500).send(err)
         }
