@@ -12,7 +12,7 @@ export const uploadUser = createAsyncThunk(
     'upload/user',
     async (user, thunkAPI) => {
         try {
-            const response = await axios.post(ServerInstanceAddress+"/upload/user", user).then(res => {
+            const response = await axios.post(ServerInstanceAddress+"/user/upload", user).then(res => {
                 return res.data
             })
             return response
@@ -25,7 +25,7 @@ export const retrieveUser = createAsyncThunk(
     '/retrieve/user',
     async (user, thunkAPI) => {
         try {
-            const response = await axios.post(ServerInstanceAddress+"/retrieve/user", user).then((res)=>{
+            const response = await axios.post(ServerInstanceAddress+"/user/retrieve", user).then((res)=>{
                 return res.data
             })
             return response
@@ -34,38 +34,6 @@ export const retrieveUser = createAsyncThunk(
             return thunkAPI.rejectWithValue({ error: error.message });
         }
     })
-
-// export const retrieveImage = createAsyncThunk(
-//     '/retrieve/image/single',
-//     async (filename, thunkAPI) => {
-//         try{
-//             const response = await axios.get(ServerInstanceAddress + 'retrieve/image/single', {
-//                 params : {
-//                     filename : filename
-//                 }
-//             }).then( res => {
-//                 return res.data
-//             })
-//             console.log(response)
-//             return response
-//         }catch (error) {
-//             // console.log(error.response.status)
-//             return thunkAPI.rejectWithValue({ error: error.message });
-//         }
-//     }
-// )
-
-export async function retrieveImage(filename) {
-    const response = await axios.get(ServerInstanceAddress + 'retrieve/image/single', {
-        params : {
-            filename : filename
-        }
-    }).then( res => {
-        return res.data
-    })
-    console.log(response)
-    return response
-}
 
 export const loginSlice = createSlice({
     name: 'login',

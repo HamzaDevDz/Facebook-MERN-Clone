@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import './Header.css'
 import HomeIcon from '@material-ui/icons/Home';
 import OndemandVideoIcon from '@material-ui/icons/OndemandVideo';
@@ -25,6 +25,7 @@ const Header = () => {
     const dispatch = useDispatch()
 
     const [openPlus, setOpenPlus] = useState(false)
+    const [picProfile, setPicProfile] = useState('')
 
     const hidePlus = () => {
         document.querySelector('.header__plus').classList.remove('open')
@@ -57,13 +58,29 @@ const Header = () => {
     }
 
     const retrieveImage = async (filename) => {
-        const response = await axios.post(ServerInstanceAddress + '/retrieve/image/single', {filename : filename}).then( res => {
-            console.log(res.data)
+        // const response = await axios.get(ServerInstanceAddress + '/image/retrieve',
+        //     {params:{filename : filename}}
+        //     ).then( res => {
+        //     console.log(res.data)
+        //     return res.data
+        // })
+        // console.log(`data:image/jpeg;base64,${response}`)
+        // const blob = new Blob(response)
+        // return `data:image/png;base64,{{${response}}}`
+        setPicProfile('hamza.jpg')
+        // return "hamza.jpg"
+    }
+
+    useEffect(async ()=>{
+        const response = await axios.get(ServerInstanceAddress + '/image/retrieve',
+            {params:{filename : user.imgUserName}}
+        ).then( res => {
+            console.log(res)
             return res.data
         })
-        // console.log(response)
-        return response
-    }
+        setPicProfile('http://localhost:9000/'+user.imgUserName)
+        // setPicProfile(`data:image/png;base64,${response}`)
+    },[])
 
     return (
         <div className={'header'}>
@@ -90,8 +107,8 @@ const Header = () => {
             </div>
             <div className={'header__account'}>
                 <div className={'header__account__user'}>
-                    <Avatar className={'header__account__user__avatar'} alt={user.username[0].toUpperCase()}
-                            src={retrieveImage(user.imgUserName)}
+                    <img className={'header__account__user__avatar'} alt={user.username[0].toUpperCase()}
+                            src={picProfile}
                     />
                     <strong>{user.firstName} {user.name}</strong>
                 </div>

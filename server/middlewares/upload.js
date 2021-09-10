@@ -11,8 +11,7 @@ const storage = new GridFsStorage({
         const match = ["image/png", "image/jpeg", "image/jpg"];
 
         if (match.indexOf(file.mimetype) === -1) {
-            const filename = `image-${Date.now()}${path.extname(file.originalname)}`
-            return filename;
+            return `image-${Date.now()}${path.extname(file.originalname)}`
         }
 
         return {
@@ -20,7 +19,24 @@ const storage = new GridFsStorage({
             filename: `image-${Date.now()}${path.extname(file.originalname)}`
         };
     },
-});
+})
+
+// const storage = new GridFsStorage({
+//     url: mongoURI,
+//     file: (req, file)=>{
+//         return new Promise((resolve, reject)=>{
+//             const filename = `image-${Date.now()}${path.extname(file.originalname)}`
+//             const fileInfo = {
+//                 filename: filename,
+//                 bucketName: 'images'
+//             }
+//             resolve(fileInfo)
+//         })
+//     }
+// })
+
+
+
 const upload = multer({ storage })
 export default upload
 // module.exports = multer({ storage });

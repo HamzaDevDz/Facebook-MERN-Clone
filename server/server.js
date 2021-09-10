@@ -26,14 +26,8 @@ connexion()
 // api routes --------------------------------------------------------------------------------------------
 app.get('/', (req, res)=>res.status(200).send('Hello world'))
 
-app.post('/image', (req, res) => {
-    console.log(req.body)
-    res.send(req.body)
-})
-
 app.use("/post", post)
 app.use("/user", user)
-
 app.use("/image", upload)
 
 
