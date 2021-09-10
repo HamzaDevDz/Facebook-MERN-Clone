@@ -1,150 +1,139 @@
 // importing stuff --------------------------------------------------------------------------------------------
 import express from 'express'
-import mongoose from 'mongoose'
 import cors from 'cors'
-import multer from 'multer'
-import {GridFsStorage} from 'multer-gridfs-storage'
-import Grid from 'gridfs-stream'
 import bodyParser from "body-parser"
-import path from 'path'
 import Pusher from "pusher"
-import mongoPosts from "./schemas/mongoPosts.js";
-import mongoUsers from "./schemas/mongoUsers.js";
+import connexion from "./db.js"
+import post from "./routes/post.js"
+import user from "./routes/user.js"
+import upload from "./routes/upload.js"
 
-Grid.mongo = mongoose.mongo
+// require("dotenv.config()");
+// Grid.mongo = mongoose.mongo
 
 // app config --------------------------------------------------------------------------------------------
 const app = express()
 const port = process.env.PORT || 9000
 
 // middlewares --------------------------------------------------------------------------------------------
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors())
 
 // db config --------------------------------------------------------------------------------------------
-const mongoURI = 'mongodb+srv://admin:WtxCs81u5oLnynRw@cluster0.otzak.mongodb.net/fbdb?retryWrites=true&w=majority'
-
-const conn = mongoose.createConnection(mongoURI,{
-    useCreateIndex: true,
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-mongoose.connect(mongoURI,{
-    useCreateIndex: true,
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-mongoose.connection.once('open', ()=>{
-    console.log('DB Connected')
-})
-let gfs
-conn.once('open', ()=>{
-    console.log('DB Connected')
-    // config the stream : db and driver of mongodb
-    gfs = Grid(conn.db, mongoose.mongo)
-    gfs.collection('images')
-})
-
-const storage = new GridFsStorage({
-    url: mongoURI,
-    file: (req, file)=>{
-        return new Promise((resolve, reject)=>{
-            const filename = `image-${Date.now()}${path.extname(file.originalname)}`
-            const fileInfo = {
-                filename: filename,
-                bucketName: 'images'
-            }
-            resolve(fileInfo)
-        })
-    }
-})
-
-const upload = multer({ storage })
+connexion()
 
 // api routes --------------------------------------------------------------------------------------------
 app.get('/', (req, res)=>res.status(200).send('Hello world'))
 
-app.post('/upload/image', upload.single('file'), (req, res)=>{
-    // console.log(req.file)
-    res.status(201).send(req.file)
-    console.log('Upload success')
+app.post('/image', (req, res) => {
+    console.log(req.body)
+    res.send(req.body)
 })
 
-app.post('/upload/post', (req, res)=>{
-    const dbPost = req.body
-    console.log(dbPost)
-    mongoPosts.create(dbPost, (err, data)=>{
-        if(err){
-            res.status(500).send(err)
-        }
-        else{
-            res.status(201).send(data)
-        }
-    })
-})
+app.use("/post", post)
+app.use("/user", user)
 
-app.get('/retrieve/image/single', (req, res)=>{
-    gfs.files.findOne({filename: req.query.filename}, (err, file)=>{
-        if(err){
-            res.status(500).send(err)
-        }
-        else{
-            if(!file || file.length === 0){
-                res.status(404).json({err: 'file not found'})
-            }
-            else{
-                const readstream = gfs.createReadStream(file.filename)
-                readstream.pipe(res)
-            }
-        }
-    })
-})
+app.use("/image", upload)
 
-app.get('/retrieve/posts', (req, res)=>{
-    mongoPosts.find((err, data)=>{
-        if(err){
-            res.status(500).send(err)
-        }
-        else{
-            data.sort((b, a)=>{
-                return a.timestamp - b.timestamp
-            })
-            res.status(200).send(data)
-        }
-    })
-})
-
-app.post('/upload/user', (req, res) => {
-    const dbUser = req.body
-    mongoUsers.create(dbUser, (err, data) => {
-        if(err){
-            res.status(500).send(err)
-        }
-        else{
-            res.status(201).send(data)
-        }
-    })
-})
-
-app.post('/retrieve/user', (req, res)=>{
-    // console.log(req)
-    mongoUsers.findOne({username: req.body.username},(err, data)=>{
-        if(err){
-            res.status(500).send(err)
-        }
-        else{
-            if(!data || data.length === 0){
-                res.status(404).json({err: 'User not found'})
-            }
-            else{
-                if(data.password !== req.body.password){
-                    res.status(403).json({err: 'Incorrect password'})
-                }
-                res.status(200).send(data)
-            }
-        }
-    })
-})
 
 // listner --------------------------------------------------------------------------------------------
-app.listen(port, ()=>console.log('listening on localhost : '+port))
+app.listen(port, ()=>console.log('listening on localhost : ' + port))
+
+// let gfs;
+// const conn = mongoose.connection;
+// conn.once("open", function () {
+//     gfs = Grid(conn.db, mongoose.mongo);
+//     gfs.collection("images");
+// });
+
+// const mongoURI = 'mongodb+srv://admin:WtxCs81u5oLnynRw@cluster0.otzak.mongodb.net/fbdb?retryWrites=true&w=majority'
+//
+// const conn = mongoose.createConnection(mongoURI,{
+//     useCreateIndex: true,
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+// })
+// mongoose.connect(mongoURI,{
+//     useCreateIndex: true,
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+// })
+// mongoose.connection.once('open', ()=>{
+//     console.log('DB Connected')
+// })
+
+
+
+// let gfs
+// conn.once('open', ()=>{
+//     console.log('DB Connected')
+//     // config the stream : db and driver of mongodb
+//     gfs = Grid(conn.db, mongoose.mongo)
+//     gfs.collection('images')
+// })
+
+// const storage = new GridFsStorage({
+//     url: mongoURI,
+//     file: (req, file)=>{
+//         return new Promise((resolve, reject)=>{
+//             const filename = `image-${Date.now()}${path.extname(file.originalname)}`
+//             const fileInfo = {
+//                 filename: filename,
+//                 bucketName: 'images'
+//             }
+//             resolve(fileInfo)
+//         })
+//     }
+// })
+
+// const upload = multer({ storage })
+
+
+// app.use("/image", upload)
+//
+// app.get("/image/:filename", async (req, res) => {
+//     try {
+//         const file = await gfs.files.findOne({ filename: req.params.filename });
+//         const readStream = gfs.createReadStream(file.filename);
+//         readStream.pipe(res);
+//     } catch (error) {
+//         res.send("not found");
+//     }
+// });
+//
+// app.delete("/image/:filename", async (req, res) => {
+//     try {
+//         await gfs.files.deleteOne({ filename: req.params.filename });
+//         res.send("success");
+//     } catch (error) {
+//         console.log(error);
+//         res.send("An error occured.");
+//     }
+// });
+
+// app.post('/upload/image', upload.single('file'), (req, res)=>{
+//     // console.log(req.file)
+//     res.status(201).send(req.file)
+//     console.log('Upload success')
+// })
+
+
+
+// app.post('/retrieve/image/single', (req, res)=>{
+//     gfs.files.findOne({filename: req.body.filename}, (err, file)=>{
+//         if(err){
+//             res.status(500).send(err)
+//         }
+//         else{
+//             if(!file || file.length === 0){
+//                 res.status(404).json({err: 'file not found'})
+//             }
+//             else{
+//                 const readstream = gfs.createReadStream(file.filename)
+//                 readstream.pipe(res)
+//                 // res.send('success')
+//             }
+//         }
+//     })
+// })

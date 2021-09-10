@@ -56,15 +56,12 @@ const Header = () => {
         }
     }
 
-    const retrieveImage = (filename) => {
-        const response = axios.get(ServerInstanceAddress + 'retrieve/image/single', {
-            params : {
-                filename : filename
-            }
-        }).then( res => {
+    const retrieveImage = async (filename) => {
+        const response = await axios.post(ServerInstanceAddress + '/retrieve/image/single', {filename : filename}).then( res => {
+            console.log(res.data)
             return res.data
         })
-        console.log(response)
+        // console.log(response)
         return response
     }
 
@@ -93,8 +90,8 @@ const Header = () => {
             </div>
             <div className={'header__account'}>
                 <div className={'header__account__user'}>
-                    <Avatar className={'header__account__user__avatar'} alt={user.username[0]}
-                            src={dispatch(retrieveImage(user.imgUserName))}
+                    <Avatar className={'header__account__user__avatar'} alt={user.username[0].toUpperCase()}
+                            src={retrieveImage(user.imgUserName)}
                     />
                     <strong>{user.firstName} {user.name}</strong>
                 </div>
