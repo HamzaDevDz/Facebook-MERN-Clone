@@ -32,9 +32,6 @@ router.get("/retrieve", async (req, res) => {
     try {
         const file = await gfs.files.findOne({ filename: req.query.filename });
         const readStream = gfs.createReadStream(file.filename);
-        // readStream.on('data', (chunk) => {
-        //     res.render('newHandlebarFile', { image: chunk.toString('base64') });
-        // })
         readStream.pipe(res);
     } catch (error) {
         res.send("Image not found");

@@ -57,18 +57,8 @@ const Header = () => {
         }
     }
 
-    const retrieveImage = async (filename) => {
-        // const response = await axios.get(ServerInstanceAddress + '/image/retrieve',
-        //     {params:{filename : filename}}
-        //     ).then( res => {
-        //     console.log(res.data)
-        //     return res.data
-        // })
-        // console.log(`data:image/jpeg;base64,${response}`)
-        // const blob = new Blob(response)
-        // return `data:image/png;base64,{{${response}}}`
-        setPicProfile('hamza.jpg')
-        // return "hamza.jpg"
+    const arrayBufferToBase64 = (buffer) => {
+        return window.btoa(String.fromCharCode.apply(null, buffer.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ")));
     }
 
     useEffect(async ()=>{
@@ -76,11 +66,13 @@ const Header = () => {
             {params:{filename : user.imgUserName}}
         ).then( res => {
             console.log(res)
+            setPicProfile(user.imgUserName)
             return res.data
         })
-        setPicProfile('http://localhost:9000/'+user.imgUserName)
-        // setPicProfile(`data:image/png;base64,${response}`)
-    },[])
+        // console.log('data:image/jpeg;base64,'+arrayBufferToBase64(response))
+        // setPicProfile('data:image/jpeg;base64,'+arrayBufferToBase64(response))
+        // setPicProfile(user.imgUserName)
+    }, [])
 
     return (
         <div className={'header'}>
