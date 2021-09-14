@@ -2,9 +2,9 @@ import express from "express"
 import mongoPosts from "../models/mongoPosts.js";
 const router = express.Router();
 
-router.post('/upload/', (req, res)=>{
+router.post('/upload', (req, res)=>{
     const dbPost = req.body
-    console.log(dbPost)
+    // console.log(dbPost)
     mongoPosts.create(dbPost, (err, data)=>{
         if(err){
             res.status(500).send(err)

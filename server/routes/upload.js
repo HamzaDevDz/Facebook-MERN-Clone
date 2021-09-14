@@ -12,23 +12,13 @@ conn.once("open", () => {
     gfs.collection("images");
 })
 
-router.post('/', (req, res) => {
-    // console.log(req.file.filename)
-    console.log(req.body)
-    res.send(req.body.filename)
-})
-
 router.post("/upload", upload.single("file"), async (req, res) => {
-
     if (req.file === undefined) return res.send("you must select a file.")
-
-    console.log(req.file.filename)
     return res.send(req.file.filename)
 });
 
 // media routes
 router.get("/retrieve", async (req, res) => {
-    // console.log(req.query)
     try {
         const file = await gfs.files.findOne({ filename: req.query.filename });
         const readStream = gfs.createReadStream(file.filename);

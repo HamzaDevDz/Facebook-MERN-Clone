@@ -3,20 +3,22 @@ import './Post.css'
 import Avatar from "@material-ui/core/Avatar";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import CommentIcon from '@material-ui/icons/Comment';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setLikesPostById} from "../postsSlice";
 import {Comment} from "../comment/Comment";
 import {calculateDifferenceTimestamps} from '../../../calcul/calcul'
 import {UploadComment} from "../uploadComment/UploadComment";
+import {selectUser} from "../../../login/loginSlice";
+import {getImage} from "../../../../ServerInstance";
 
 
-export const Post = ({idPost, imgUserURL, username, timestamp, caption, imgPostURL, likes, comments}) => {
+export const Post = ({idPost, imgUser, username, timestamp, caption, imgPost, likes, comments}) => {
 
     const dispatch = useDispatch()
-    const currentUsername = 'HamzaHamdoud'
+    const user = useSelector(selectUser)
 
     useEffect(()=>{
-        if(likes.includes(currentUsername)){
+        if(likes.includes(user.username)){
             document.getElementById(`post_likes_${idPost}`).style.color = 'blue'
         }
         else{
@@ -26,7 +28,7 @@ export const Post = ({idPost, imgUserURL, username, timestamp, caption, imgPostU
 
 
     const hanldeLikePost = () => {
-        dispatch(setLikesPostById(idPost, currentUsername))
+        dispatch(setLikesPostById(idPost, user.username))
     }
 
     const handleCommentsPost = (e) => {
@@ -44,7 +46,7 @@ export const Post = ({idPost, imgUserURL, username, timestamp, caption, imgPostU
     return (
         <div className={'feed__posts__post'}>
             <div className={'feed__posts__post__head'}>
-                <Avatar className={'feed__posts__post__head__avatar'} alt={username[0]} src={imgUserURL} />
+                <Avatar className={'feed__posts__post__head__avatar'} alt={username[0]} src={getImage(imgUser)} />
                 <div className={'feed__posts__post__head__user'}>
                     <strong className={'feed__posts__post__head__user__username'}>{username}</strong>
                     <span className={'feed__posts__post__head__user__timestamp'}>
@@ -56,8 +58,8 @@ export const Post = ({idPost, imgUserURL, username, timestamp, caption, imgPostU
                 {caption}
             </div>
             {
-                imgPostURL !== null ?
-                    <img src={imgPostURL} alt={''} className={'feed__posts__post__image'} />
+                imgPost !== null ?
+                    <img src={getImage(imgPost)} alt={''} className={'feed__posts__post__image'} />
                     :
                     ''
             }

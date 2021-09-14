@@ -1,10 +1,20 @@
 import mongoose from 'mongoose'
 
 const postModel = mongoose.Schema({
-    user: String,
-    imgName: String,
-    text: String,
-    avatar: String,
+    username: String,
+    imgUser: String,
+    caption: String,
+    imgPost: String,
+    videoPost: String,
+    mood: String,
+    likes: [String],
+    comments: [{
+        username: String,
+        imgUser: String,
+        text: String,
+        timestamp: String,
+        likes: [String]
+    }],
     timestamp: String
 })
 

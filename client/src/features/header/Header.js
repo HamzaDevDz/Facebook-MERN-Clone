@@ -14,11 +14,9 @@ import IconButton from "@material-ui/core/IconButton";
 import {useDispatch, useSelector} from "react-redux";
 import {selectUser} from "../login/loginSlice";
 import axios from "axios";
-import {ServerInstanceAddress} from "../../ServerInstance";
+import {ServerInstanceAddress, getImage} from "../../ServerInstance";
 
 const Header = () => {
-
-    // const user = {username:'HamzaHamdoud', name:'Hamza', fname:'Hamdoud', imgUserURL:'hamza.jpg'}
 
     const user = useSelector(selectUser)
 
@@ -57,22 +55,9 @@ const Header = () => {
         }
     }
 
-    const arrayBufferToBase64 = (buffer) => {
-        return window.btoa(String.fromCharCode.apply(null, buffer.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ")));
-    }
-
     useEffect(async ()=>{
-        const response = await axios.get(ServerInstanceAddress + '/image/retrieve',
-            {params:{filename : user.imgUserName}}
-        ).then( res => {
-            console.log(res)
-            setPicProfile(user.imgUserName)
-            return res.data
-        })
-        // console.log('data:image/jpeg;base64,'+arrayBufferToBase64(response))
-        // setPicProfile('data:image/jpeg;base64,'+arrayBufferToBase64(response))
-        // setPicProfile(user.imgUserName)
-    }, [])
+        setPicProfile(getImage(user.imgUserName))
+    },[])
 
     return (
         <div className={'header'}>
@@ -99,7 +84,7 @@ const Header = () => {
             </div>
             <div className={'header__account'}>
                 <div className={'header__account__user'}>
-                    <img className={'header__account__user__avatar'} alt={user.username[0].toUpperCase()}
+                    <Avatar className={'header__account__user__avatar'} alt={user.username[0].toUpperCase()}
                             src={picProfile}
                     />
                     <strong>{user.firstName} {user.name}</strong>

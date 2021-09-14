@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useEffect, useState} from "react"
 import './Sidebar.css'
 import Avatar from "@material-ui/core/Avatar";
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
@@ -8,16 +8,23 @@ import ChatIcon from '@material-ui/icons/Chat';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {useSelector} from "react-redux";
+import {selectUser} from "../login/loginSlice";
+import {getImage} from "../../ServerInstance";
 
 export const Sidebar = () => {
 
-    const username = 'HamzaHamdoud'
+    const user = useSelector(selectUser)
+    const [img, setImg] = useState('')
+    useEffect(()=>{
+        setImg(getImage(user.imgUserName))
+    }, [])
 
     return (
         <div className={'sidebar'}>
             <div className={'sidebar__user'}>
-                <Avatar className={'sidebar__user__avatar'} alt="H" src="hamza.jpg" />
-                <strong>{username}</strong>
+                <Avatar className={'sidebar__user__avatar'} alt="H" src={img} />
+                <strong>{user.firstName} {user.name}</strong>
             </div>
             <div className={'sidebar__point sidebar__covid'}>
                 <LocalHospitalIcon className={'sidebar__point__icon'} style={{color:'#3F51B5'}} />

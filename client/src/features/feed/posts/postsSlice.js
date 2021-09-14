@@ -1,30 +1,38 @@
-import { createSlice } from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {generateUniqueId} from '../../calcul/calcul'
+import axios from "axios";
+import {ServerInstanceAddress} from "../../../ServerInstance";
+import {uploadUser} from "../../login/loginSlice";
 
 const initialState = {
-    posts: [
-        {
-            idPost: 1,
-            imgUserURL: 'hamza.jpg',
-            username: 'HamzaHamdoud',
-            timestamp: '1629721044600',
-            caption: 'Golf 6 Match 2',
-            imgPostURL: 'hamza.jpg',
-            comments:[{
-                idComment: 1,
-                imgUserURL: 'hamza.jpg',
-                username: 'HamzaHamdoud',
-                timestamp: '1629721044700',
-                text: 'Super !',
-                likes: ['HamzaHamdoud', 'HakemHamdoud']
-            }],
-            likes: [
-                'BaghdadHamdoud', 'HamzaHamdoud'
-            ]
-
-        }
-    ]
+    posts: [],
 }
+
+export const getPosts = createAsyncThunk(
+    'post/retrieve',
+    async (empty, thunkAPI) => {
+        try {
+            const response = await axios.get(ServerInstanceAddress+"/post/retrieve").then(res => {
+                return res.data
+            })
+            return response
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
+
+export const uploadPost = createAsyncThunk(
+    'posts/retrieve',
+    async (newPost, thunkAPI) => {
+        try {
+            const response = await axios.post(ServerInstanceAddress+"/post/upload", newPost).then(res => {
+                return res.data
+            })
+            return response
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
 
 export const postsSlice = createSlice({
     name: 'posts',
@@ -134,7 +142,16 @@ export const postsSlice = createSlice({
             }
         }
     },
-    extraReducers: {}
+    extraReducers: {
+        // GET POSTS
+        [getPosts.fulfilled]: (state, action) => {
+            state.posts = action.payload
+        },
+        // UPLOAD POST
+        [uploadPost.fulfilled]: (state, action) => {
+            state.posts.push(action.payload)
+        },
+    }
 });
 
 export const {setLikesPostById, setLikeCommentById, addCommentToPostById, addPost} = postsSlice.actions;
