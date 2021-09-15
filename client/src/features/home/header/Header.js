@@ -12,15 +12,17 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 import IconButton from "@material-ui/core/IconButton";
 import {useDispatch, useSelector} from "react-redux";
-import {selectUser} from "../login/loginSlice";
+import {retrieveLocalUser, selectUser} from "../login/loginSlice";
 import axios from "axios";
 import {ServerInstanceAddress, getImage} from "../../ServerInstance";
+import {useHistory} from "react-router-dom"
 
 const Header = () => {
 
     const user = useSelector(selectUser)
 
     const dispatch = useDispatch()
+    const history = useHistory()
 
     const [openPlus, setOpenPlus] = useState(false)
     const [picProfile, setPicProfile] = useState('')
@@ -55,9 +57,14 @@ const Header = () => {
         }
     }
 
-    useEffect(async ()=>{
-        setPicProfile(getImage(user.imgUserName))
-    },[])
+    useEffect(() => {
+        if(user !== null){
+            setPicProfile(getImage(user.imgUserName))
+        }
+        else{
+            dispatch(retrieveLocalUser())
+        }
+    }, [user])
 
     return (
         <div className={'header'}>

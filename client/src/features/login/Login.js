@@ -4,9 +4,10 @@ import './Login.css'
 import TextField from "@material-ui/core/TextField"
 import {useHistory} from "react-router-dom"
 import {useDispatch, useSelector} from "react-redux";
-import {resetError, retrieveUser, selectErr, selectUser} from "./loginSlice";
+import {resetError, retrieveLocalUser, retrieveUser, selectErr, selectUser} from "./loginSlice";
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from "@material-ui/lab/AlertTitle";
+import FormControl from "@material-ui/core/FormControl";
 
 export const Login = () => {
 
@@ -28,6 +29,9 @@ export const Login = () => {
     useEffect(()=>{
         if(user !== null){
             history.push("/home")
+        }
+        else{
+            // dispatch(retrieveLocalUser())
         }
     }, [user])
 
@@ -54,6 +58,7 @@ export const Login = () => {
 
     const handleLogin = (e) => {
         e.preventDefault()
+        console.log('click login')
         if(username && password){
             const userLogin = {
                 username: username.toLocaleLowerCase(),
@@ -69,28 +74,30 @@ export const Login = () => {
         <div className={'login'}>
             <img src={'fb_img.png'} alt={''} className={'login__img'} />
             <form className={'login__form'}>
-                <TextField label="Username" variant="outlined"
-                           className={'login__form__username'}
-                           value={username}
-                           onChange={e=>setUsername(e.target.value)}
-                />
-                <TextField label="Password" variant="outlined"
-                           type="Password"
-                           className={'login__form__password'}
-                           value={password}
-                           onChange={e=>setPassword(e.target.value)}
-                />
-                <Alert severity="error" className={'login__form__error'}>
-                    <AlertTitle>Error</AlertTitle>
-                    {error}
-                </Alert>
-                <Button variant="contained" color="primary"
-                        className={'login__form__btn'}
-                        onClick={handleLogin}
-                        disabled={!username || !password}
-                >
-                    Login
-                </Button>
+                <FormControl className={'login__form__formControl'}>
+                    <TextField label="Username" variant="outlined"
+                               className={'login__form__username'}
+                               value={username}
+                               onChange={e=>setUsername(e.target.value)}
+                    />
+                    <TextField label="Password" variant="outlined"
+                               type="Password"
+                               className={'login__form__password'}
+                               value={password}
+                               onChange={e=>setPassword(e.target.value)}
+                    />
+                    <Alert severity="error" className={'login__form__error'}>
+                        <AlertTitle>Error</AlertTitle>
+                        {error}
+                    </Alert>
+                    <Button variant="contained" color="primary"
+                            className={'login__form__btn'}
+                            onClick={handleLogin}
+                            disabled={!username || !password}
+                    >
+                        Login
+                    </Button>
+                </FormControl>
             </form>
             <Button className={'login__signUp'}
                     onClick={()=> {

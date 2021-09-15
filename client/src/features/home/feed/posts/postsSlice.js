@@ -1,8 +1,8 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {generateUniqueId} from '../../calcul/calcul'
+import {generateUniqueId} from '../../../calcul/calcul'
 import axios from "axios";
-import {ServerInstanceAddress} from "../../../ServerInstance";
-import {uploadUser} from "../../login/loginSlice";
+import {ServerInstanceAddress} from "../../../../ServerInstance";
+import {uploadUser} from "../../../login/loginSlice";
 
 const initialState = {
     posts: [],

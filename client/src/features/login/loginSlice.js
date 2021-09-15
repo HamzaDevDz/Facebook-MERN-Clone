@@ -2,7 +2,6 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {ServerInstanceAddress} from "../../ServerInstance";
 import axios from "axios";
 
-
 const initialState = {
     user: null,
     err: null
@@ -35,6 +34,18 @@ export const retrieveUser = createAsyncThunk(
         }
     })
 
+export const retrieveLocalUser = createAsyncThunk(
+    '/retrieve/localUser',
+    async (empty, thunkAPI) => {
+        const localUser = await localStorage.getItem('user')
+        if(localUser){
+            return localUser
+        }
+        else{
+            return new Error('User not found')
+        }
+    })
+
 export const loginSlice = createSlice({
     name: 'login',
     initialState,
@@ -50,12 +61,17 @@ export const loginSlice = createSlice({
         },
         // RETRIEVE USER
         [retrieveUser.fulfilled]: (state, action) => {
+            localStorage.setItem('user', action.payload)
             state.user = action.payload
         },
         [retrieveUser.rejected]: (state, action) => {
             const messageError = action.payload.error.split(' ')
             const codeError = messageError[messageError.length - 1]
             state.err = parseInt(codeError)
+        },
+        // RETRIEVE LOCAL USER
+        [retrieveLocalUser.fulfilled]: (state, action) => {
+            state.user = action.payload
         }
     }
 })

@@ -1,10 +1,11 @@
 import React from 'react';
 import Header from "./features/header/Header";
-import {Feed} from "./features/feed/Feed";
+import {Feed} from "./features/home/feed/Feed";
 import {Sidebar} from "./features/sidebar/Sidebar";
 import {Redirect, Route, Switch, BrowserRouter as Router} from "react-router-dom";
 import {Login} from "./features/login/Login";
 import {SignUp} from "./features/login/SignUp/SignUp";
+import {Home} from "./features/home/Home";
 
 function App() {
   return (
@@ -13,16 +14,17 @@ function App() {
             <Switch>
                 <Route exact path={'/login'} component={Login}/>
                 <Route exact path={'/signUp'} component={SignUp} />
-                <Route exact
-                       path={'/home'}
-                       render={()=>(
-                           <React.Fragment>
-                               <Header/>
-                               <Feed />
-                               <Sidebar />
-                           </React.Fragment>
-                       )}
-                />
+                <Route exact path={'/home'} component={Home} />
+                {/*<Route exact*/}
+                {/*       path={'/home'}*/}
+                {/*       render={()=>(*/}
+                {/*           <React.Fragment>*/}
+                {/*               <Header/>*/}
+                {/*               <Feed />*/}
+                {/*               <Sidebar />*/}
+                {/*           </React.Fragment>*/}
+                {/*       )}*/}
+                {/*/>*/}
                 <Redirect to="/login" />
             </Switch>
         </div>
