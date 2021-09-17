@@ -6,10 +6,10 @@ import CommentIcon from '@material-ui/icons/Comment';
 import {useDispatch, useSelector} from "react-redux";
 import {setLikesPostById} from "../postsSlice";
 import {Comment} from "../comment/Comment";
-import {calculateDifferenceTimestamps} from '../../../calcul/calcul'
+import {calculateDifferenceTimestamps} from '../../../../calcul/calcul'
 import {UploadComment} from "../uploadComment/UploadComment";
-import {selectUser} from "../../../login/loginSlice";
-import {getImage} from "../../../../ServerInstance";
+import {selectUser} from "../../../../login/loginSlice";
+import {getImage} from "../../../../../ServerInstance";
 
 
 export const Post = ({idPost, imgUser, username, timestamp, caption, imgPost, likes, comments}) => {

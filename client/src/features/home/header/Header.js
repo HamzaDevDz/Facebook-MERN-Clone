@@ -12,12 +12,11 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 import IconButton from "@material-ui/core/IconButton";
 import {useDispatch, useSelector} from "react-redux";
-import {retrieveLocalUser, selectUser} from "../login/loginSlice";
-import axios from "axios";
-import {ServerInstanceAddress, getImage} from "../../ServerInstance";
+import {logOut, selectUser} from "../../login/loginSlice";
+import {getImage} from "../../../ServerInstance";
 import {useHistory} from "react-router-dom"
 
-const Header = () => {
+export const Header = () => {
 
     const user = useSelector(selectUser)
 
@@ -31,13 +30,13 @@ const Header = () => {
         document.querySelector('.header__plus').classList.remove('open')
         setOpenPlus(false)
         document.querySelector('.header__account__btnPlus__iconPlus').style.color = '#6E6F70'
-        window.removeEventListener('click', eventListnerBox)
+        // window.removeEventListener('click', eventListnerBox)
     }
     const showPlus = () => {
         document.querySelector('.header__plus').classList.add('open')
         setOpenPlus(true)
         document.querySelector('.header__account__btnPlus__iconPlus').style.color = 'blue'
-        window.addEventListener('click', eventListnerBox)
+        // window.addEventListener('click', eventListnerBox)
     }
 
     const handleOpenPlus = (e) => {
@@ -49,27 +48,23 @@ const Header = () => {
         }
     }
 
-    const eventListnerBox = (e) => {
-        const box = document.querySelector('.header__plus')
-        const btn = document.querySelector('.header__account__btnPlus')
-        if(e.target !== box && e.target !== btn && !box.contains(e.target) && !btn.contains(e.target)){
-            hidePlus()
-        }
-    }
+    // const eventListnerBox = (e) => {
+    //     const box = document.querySelector('.header__plus')
+    //     const btn = document.querySelector('.header__account__btnPlus')
+    //     if(e.target !== box && e.target !== btn && !box.contains(e.target) && !btn.contains(e.target)){
+    //         hidePlus()
+    //     }
+    // }
 
-    useEffect(() => {
-        if(user !== null){
-            setPicProfile(getImage(user.imgUserName))
-        }
-        else{
-            dispatch(retrieveLocalUser())
-        }
-    }, [user])
+    const handleLogOut = () => {
+        dispatch(logOut())
+        history.push('/login')
+    }
 
     return (
         <div className={'header'}>
             <div className={'header__search'}>
-                <img className={'header__search__img'} src={'icons/facebook_icon.png'} alt={''} />
+                <img className={'header__search__img'} src={'icons/facebook_icon.png'} alt={user.username[0].toUpperCase()} />
                 <div className={'header__search__barSearch'}>
                     <SearchIcon className={'header__search__barSearch__icon'} fontSize="medium" color="action"/>
                     <input className={'header__search__barSearch__input'} placeholder="Search"
@@ -91,8 +86,8 @@ const Header = () => {
             </div>
             <div className={'header__account'}>
                 <div className={'header__account__user'}>
-                    <Avatar className={'header__account__user__avatar'} alt={user.username[0].toUpperCase()}
-                            src={picProfile}
+                    <Avatar className={'header__account__user__avatar'} alt={''}
+                            src={getImage(user.imgUserName)}
                     />
                     <strong>{user.firstName} {user.name}</strong>
                 </div>
@@ -109,21 +104,22 @@ const Header = () => {
             </div>
             <div className={'header__plus'}>
                 <div className={'header__plus__btn header__plus__profile'}>
-                    <Avatar className={'header__plus__profile__avatar'} alt="H" src="hamza.jpg" />
+                    <Avatar className={'header__plus__profile__avatar'} alt={user.username[0].toUpperCase()} src={getImage(user.imgUserName)} />
                     <div className={'header__plus__profile__text'}>
-                        <strong>Hamza Hamdoud</strong>
+                        <strong>{user.firstName} {user.name}</strong>
                         <p className={'header__plus__profile__text__placeholder'}>Go to the profile</p>
                     </div>
                 </div>
                 <div className={'header__plus__btn header__plus__settings'}>
                     <SettingsIcon className={'header__plus__btn__icon'} /> Setting
                 </div>
-                <div className={'header__plus__btn header__plus__logout'}>
-                    <ExitToAppIcon className={'header__plus__btn__icon'} /> Log Out
+                <div className={'header__plus__btn header__plus__logout'}
+                     onClick={handleLogOut}
+                >
+                    <ExitToAppIcon className={'header__plus__btn__icon'}/>
+                    Log Out
                 </div>
             </div>
         </div>
     )
 }
-
-export default Header

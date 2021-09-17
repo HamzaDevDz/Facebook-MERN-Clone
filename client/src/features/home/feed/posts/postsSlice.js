@@ -2,10 +2,9 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {generateUniqueId} from '../../../calcul/calcul'
 import axios from "axios";
 import {ServerInstanceAddress} from "../../../../ServerInstance";
-import {uploadUser} from "../../../login/loginSlice";
 
 const initialState = {
-    posts: [],
+    posts: []
 }
 
 export const getPosts = createAsyncThunk(
@@ -156,6 +155,6 @@ export const postsSlice = createSlice({
 
 export const {setLikesPostById, setLikeCommentById, addCommentToPostById, addPost} = postsSlice.actions;
 
-export const selectPosts = (state) => state.posts.posts;
+export const selectPosts = (state) => state.posts.posts
 
 export default postsSlice.reducer;

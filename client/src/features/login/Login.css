@@ -19,6 +19,13 @@
     align-items: center;
     width: 300px;
 }
+.login__form__formControl{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
 .login__form__password{
     margin: 20px 0 !important;
 }
@@ -37,4 +44,7 @@
 }
 .login__form__formControl{
     width: 100%;
+}
+.login__form__wait{
+    position: absolute;
 }

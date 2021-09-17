@@ -4,7 +4,7 @@ import Avatar from "@material-ui/core/Avatar";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import {setLikeCommentById} from "../postsSlice";
 import {useDispatch} from "react-redux";
-import {calculateDifferenceTimestamps} from '../../../calcul/calcul'
+import {calculateDifferenceTimestamps} from '../../../../calcul/calcul'
 
 export const Comment = ({idPost, idComment, imgUserURL, username, timestamp, text, likes}) => {
 

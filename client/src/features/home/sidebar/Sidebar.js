@@ -9,8 +9,8 @@ import StorefrontIcon from '@material-ui/icons/Storefront';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {useSelector} from "react-redux";
-import {selectUser} from "../login/loginSlice";
-import {getImage} from "../../ServerInstance";
+import {selectUser} from "../../login/loginSlice";
+import {getImage} from "../../../ServerInstance";
 
 export const Sidebar = () => {
 

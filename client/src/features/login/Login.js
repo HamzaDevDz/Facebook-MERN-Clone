@@ -4,10 +4,11 @@ import './Login.css'
 import TextField from "@material-ui/core/TextField"
 import {useHistory} from "react-router-dom"
 import {useDispatch, useSelector} from "react-redux";
-import {resetError, retrieveLocalUser, retrieveUser, selectErr, selectUser} from "./loginSlice";
+import {resetError, retrieveLocalUser, retrieveUser, selectErr, selectStatusLogin, selectUser} from "./loginSlice";
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from "@material-ui/lab/AlertTitle";
 import FormControl from "@material-ui/core/FormControl";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 export const Login = () => {
 
@@ -21,6 +22,7 @@ export const Login = () => {
 
     const user = useSelector(selectUser)
     const err = useSelector(selectErr)
+    const statusLogin = useSelector(selectStatusLogin)
 
     useEffect(()=>{
         document.querySelector('.login__form__error').style.display = 'none'
@@ -31,7 +33,7 @@ export const Login = () => {
             history.push("/home")
         }
         else{
-            // dispatch(retrieveLocalUser())
+            dispatch(retrieveLocalUser())
         }
     }, [user])
 
@@ -56,6 +58,21 @@ export const Login = () => {
         }
     }, [err])
 
+    useEffect(()=>{
+        if(statusLogin !== null){
+            // waiting
+            document.querySelector('.login__form__wait').style.display = 'flex'
+            // document.querySelector('.login__form__input').style.pointerEvents = 'none'
+        }
+        else{
+            // not waiting : success or fail
+            document.querySelector('.login__form__wait').style.display = 'none'
+            // document.querySelector('.login__form__input').style.pointerEvents = 'auto'
+            setUsername('')
+            setPassword('')
+        }
+    }, [statusLogin])
+
     const handleLogin = (e) => {
         e.preventDefault()
         console.log('click login')
@@ -65,8 +82,7 @@ export const Login = () => {
                 password
             }
             dispatch(retrieveUser(userLogin))
-            setUsername('')
-            setPassword('')
+
         }
     }
 
@@ -76,15 +92,17 @@ export const Login = () => {
             <form className={'login__form'}>
                 <FormControl className={'login__form__formControl'}>
                     <TextField label="Username" variant="outlined"
-                               className={'login__form__username'}
+                               className={'login__form__username login__form__input'}
                                value={username}
                                onChange={e=>setUsername(e.target.value)}
+                               disabled={statusLogin !== null}
                     />
                     <TextField label="Password" variant="outlined"
                                type="Password"
-                               className={'login__form__password'}
+                               className={'login__form__password login__form__input'}
                                value={password}
                                onChange={e=>setPassword(e.target.value)}
+                               disabled={statusLogin !== null}
                     />
                     <Alert severity="error" className={'login__form__error'}>
                         <AlertTitle>Error</AlertTitle>
@@ -93,10 +111,12 @@ export const Login = () => {
                     <Button variant="contained" color="primary"
                             className={'login__form__btn'}
                             onClick={handleLogin}
-                            disabled={!username || !password}
+                            disabled={!username || !password || statusLogin !== null}
+                            type={'submit'}
                     >
                         Login
                     </Button>
+                    <CircularProgress className={'login__form__wait'} style={{display: 'none'}}/>
                 </FormControl>
             </form>
             <Button className={'login__signUp'}

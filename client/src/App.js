@@ -1,7 +1,4 @@
 import React from 'react';
-import Header from "./features/header/Header";
-import {Feed} from "./features/home/feed/Feed";
-import {Sidebar} from "./features/sidebar/Sidebar";
 import {Redirect, Route, Switch, BrowserRouter as Router} from "react-router-dom";
 import {Login} from "./features/login/Login";
 import {SignUp} from "./features/login/SignUp/SignUp";

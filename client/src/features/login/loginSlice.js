@@ -4,7 +4,8 @@ import axios from "axios";
 
 const initialState = {
     user: null,
-    err: null
+    err: null,
+    statusLogin: null
 }
 
 export const uploadUser = createAsyncThunk(
@@ -34,17 +35,6 @@ export const retrieveUser = createAsyncThunk(
         }
     })
 
-export const retrieveLocalUser = createAsyncThunk(
-    '/retrieve/localUser',
-    async (empty, thunkAPI) => {
-        const localUser = await localStorage.getItem('user')
-        if(localUser){
-            return localUser
-        }
-        else{
-            return new Error('User not found')
-        }
-    })
 
 export const loginSlice = createSlice({
     name: 'login',
@@ -52,6 +42,21 @@ export const loginSlice = createSlice({
     reducers: {
         resetError: (state) => {
             state.err = null
+        },
+        retrieveLocalUser: (state) => {
+            const localUser = localStorage.getItem('user')
+            console.log(localUser)
+            if(localUser){
+                console.log('user found')
+                state.user = JSON.parse(localUser)
+            }
+            else{
+                console.log('user not found')
+            }
+        },
+        logOut: (state) => {
+            state.user = null
+            localStorage.removeItem('user')
         }
     },
     extraReducers: {
@@ -61,24 +66,27 @@ export const loginSlice = createSlice({
         },
         // RETRIEVE USER
         [retrieveUser.fulfilled]: (state, action) => {
-            localStorage.setItem('user', action.payload)
+            state.statusLogin = null
+            localStorage.setItem('user', JSON.stringify(action.payload))
             state.user = action.payload
         },
         [retrieveUser.rejected]: (state, action) => {
+            state.statusLogin = null
             const messageError = action.payload.error.split(' ')
             const codeError = messageError[messageError.length - 1]
             state.err = parseInt(codeError)
         },
-        // RETRIEVE LOCAL USER
-        [retrieveLocalUser.fulfilled]: (state, action) => {
-            state.user = action.payload
+        [retrieveUser.pending]: (state) => {
+            state.statusLogin = 'wait'
         }
+
     }
 })
 
-export const {resetError} = loginSlice.actions
+export const {resetError, retrieveLocalUser, logOut} = loginSlice.actions
 
 export const selectUser = (state) => state.login.user
 export const selectErr = (state) => state.login.err
+export const selectStatusLogin = (state) => state.login.statusLogin
 
 export default loginSlice.reducer

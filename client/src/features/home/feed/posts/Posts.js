@@ -1,8 +1,13 @@
 import React, {useEffect} from "react"
 import './Posts.css'
 import {useDispatch, useSelector} from "react-redux";
-import {getPosts, selectPosts} from "./postsSlice";
+import {getPosts, selectPosts, selectStatusNewPost} from "./postsSlice";
 import {Post} from "./post/Post";
+import Pusher from 'pusher-js'
+
+const pusher = new Pusher('67843c3bf2c33b4e1d28', {
+    cluster: 'eu'
+});
 
 export const Posts = ({refDoc, imgUserURL, username, timestamp, caption, imgPostURL, comments}) => {
 
@@ -11,8 +16,16 @@ export const Posts = ({refDoc, imgUserURL, username, timestamp, caption, imgPost
     const dispatch = useDispatch()
 
     useEffect(()=>{
+        const channel = pusher.subscribe('posts');
+        channel.bind('inserted', function(data) {
+            dispatch(getPosts())
+        });
+    },[])
+
+    useEffect(()=>{
         dispatch(getPosts())
-    }, [posts])
+    }, [])
+
 
     return (
         <div className={'feed__posts'}>
