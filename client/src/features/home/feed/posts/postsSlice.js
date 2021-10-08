@@ -21,10 +21,23 @@ export const getPosts = createAsyncThunk(
     })
 
 export const uploadPost = createAsyncThunk(
-    'posts/retrieve',
+    'posts/upload',
     async (newPost, thunkAPI) => {
         try {
             const response = await axios.post(ServerInstanceAddress+"/post/upload", newPost).then(res => {
+                return res.data
+            })
+            return response
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
+
+export const addCommentToPostById = createAsyncThunk(
+    'posts/comment/upload',
+    async (newComment, thunkAPI) => {
+        try {
+            const response = await axios.post(ServerInstanceAddress+"/post/comment/upload", newComment).then(res => {
                 return res.data
             })
             return response
@@ -148,12 +161,16 @@ export const postsSlice = createSlice({
         },
         // UPLOAD POST
         [uploadPost.fulfilled]: (state, action) => {
-            state.posts.push(action.payload)
+            // state.posts.push(action.payload)
         },
+        [addCommentToPostById.fulfilled]: (state, action) => {
+            console.log('comment uploaded !')
+            console.log(action.payload)
+        }
     }
 });
 
-export const {setLikesPostById, setLikeCommentById, addCommentToPostById, addPost} = postsSlice.actions;
+export const {setLikesPostById, setLikeCommentById, addPost} = postsSlice.actions;
 
 export const selectPosts = (state) => state.posts.posts
 

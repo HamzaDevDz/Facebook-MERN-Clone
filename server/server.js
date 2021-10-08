@@ -18,7 +18,7 @@ const pusher = new Pusher({
     secret: "e06265628e3ac531171d",
     cluster: "eu",
     useTLS: true
-});
+})
 
 // middlewares --------------------------------------------------------------------------------------------
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -28,14 +28,12 @@ app.use(cors())
 // db config --------------------------------------------------------------------------------------------
 connexion()
 
-
 // api routes --------------------------------------------------------------------------------------------
 app.get('/', (req, res)=>res.status(200).send('Hello world'))
 
 app.use("/post", post)
 app.use("/user", user)
 app.use("/image", upload)
-
 
 // listner --------------------------------------------------------------------------------------------
 app.listen(port, ()=>console.log('listening on localhost : ' + port))

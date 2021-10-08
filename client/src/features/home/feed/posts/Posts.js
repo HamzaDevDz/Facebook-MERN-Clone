@@ -9,7 +9,7 @@ const pusher = new Pusher('67843c3bf2c33b4e1d28', {
     cluster: 'eu'
 });
 
-export const Posts = ({refDoc, imgUserURL, username, timestamp, caption, imgPostURL, comments}) => {
+export const Posts = () => {
 
     const posts = useSelector(selectPosts)
 
@@ -19,7 +19,10 @@ export const Posts = ({refDoc, imgUserURL, username, timestamp, caption, imgPost
         const channel = pusher.subscribe('posts');
         channel.bind('inserted', function(data) {
             dispatch(getPosts())
-        });
+        })
+        channel.bind('updated', function(data) {
+            dispatch(getPosts())
+        })
     },[])
 
     useEffect(()=>{

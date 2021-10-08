@@ -1,9 +1,9 @@
 /* UPLOAD COMMENT */
 .feed__posts__post__uploadComment{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    width: 98%;
+    width: 100%;
 }
 .feed__posts__post__uploadComment__avatar{
     margin-right: 10px;
@@ -17,4 +17,10 @@
 }
 .feed__posts__post__uploadComment__input::before, .feed__posts__post__uploadComment__input::after{
     width: 0;
+}
+.feed__posts__post__uploadComment__formControl{
+    display: flex;
+    flex-direction: row !important;
+    align-items: center;
+    width: 98%;
 }

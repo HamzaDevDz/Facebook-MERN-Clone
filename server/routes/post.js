@@ -29,6 +29,23 @@ router.get('/retrieve', (req, res)=>{
     })
 })
 
-export default router
+router.post('/comment/upload', (req, res)=>{
+    const newComment = req.body
+    console.log(newComment)
+    mongoPosts.findOneAndUpdate(
+        {_id: newComment.idPost},
+        {
+            $push:{
+                comments: newComment.comment
+            }
+        }
+    ).then(data => {
+        console.log('comment added')
+        res.send(data).status(200)
+    }).catch(err => {
+        console.log('comment not added')
+        res.status(500).send(err)
+    })
+})
 
-// module.exports = router;
+export default router
