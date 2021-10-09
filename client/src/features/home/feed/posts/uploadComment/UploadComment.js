@@ -24,7 +24,7 @@ export const UploadComment = ({idPost}) => {
                 username: user.username,
                 imgUserName: user.imgUserName,
                 text: comment,
-                timestamps: Date.now(),
+                timestamp: Date.now(),
                 likes: []
             }
 

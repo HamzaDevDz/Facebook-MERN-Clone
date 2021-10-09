@@ -5,8 +5,9 @@ import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import {setLikeCommentById} from "../postsSlice";
 import {useDispatch} from "react-redux";
 import {calculateDifferenceTimestamps} from '../../../../calcul/calcul'
+import {getImage} from "../../../../../ServerInstance";
 
-export const Comment = ({idPost, idComment, imgUserURL, username, timestamp, text, likes}) => {
+export const Comment = ({idPost, idComment, imgUserName, username, timestamp, text, likes}) => {
 
     const dispatch = useDispatch()
     const currentUsername = 'HamzaHamdoud'
@@ -20,13 +21,13 @@ export const Comment = ({idPost, idComment, imgUserURL, username, timestamp, tex
         }
     }, [likes])
 
-    const handleLikeComment = (e) => {
+    const handleLikeComment = () => {
         dispatch(setLikeCommentById(idPost, idComment, currentUsername))
     }
 
     return(
-        <div className={'comment'}>
-            <Avatar className={'comment__avatar'} alt={username[0]} src={imgUserURL} />
+        <div className={'comment'} id={idComment}>
+            <Avatar className={'comment__avatar'} alt={username[0].toUpperCase()} src={getImage(imgUserName)} />
             <div className={'comment__userAndTextAndStates'}>
                 <strong className={'comment__userAndTextAndStates__user'}>{username}</strong>
                 <p className={'comment__userAndTextAndStates__text'}>{text}</p>

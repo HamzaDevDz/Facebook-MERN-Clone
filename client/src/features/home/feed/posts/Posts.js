@@ -43,7 +43,7 @@ export const Posts = () => {
                           imgPost={post.imgPost}
                           comments={post.comments}
                           likes={post.likes}
-                          videoPoat={post.videoPost}
+                          videoPost={post.videoPost}
                           mood={post.mood}
                     />
                 ))

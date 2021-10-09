@@ -12,10 +12,10 @@ const postModel = mongoose.Schema({
         username: String,
         imgUserName: String,
         text: String,
-        timestamp: String,
+        timestamp: Number,
         likes: [String]
     }],
-    timestamp: String
+    timestamp: Number
 })
 
 // 1st param : name of collection

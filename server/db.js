@@ -1,7 +1,8 @@
 import mongoose from "mongoose"
 import Pusher from "pusher"
 
-const mongoURI = 'mongodb+srv://admin:WtxCs81u5oLnynRw@cluster0.otzak.mongodb.net/fbdb?retryWrites=true&w=majority'
+// const mongoURI = 'mongodb+srv://admin:WtxCs81u5oLnynRw@cluster0.otzak.mongodb.net/fbdb?retryWrites=true&w=majority&ssl=true'
+const mongoURI = 'mongodb://admin:WtxCs81u5oLnynRw@cluster0-shard-00-00.otzak.mongodb.net:27017,cluster0-shard-00-01.otzak.mongodb.net:27017,cluster0-shard-00-02.otzak.mongodb.net:27017/fbdb?ssl=true&replicaSet=atlas-6cn4r8-shard-0&authSource=admin&retryWrites=true&w=majority'
 
 const pusher = new Pusher({
     appId: "1268564",
@@ -18,6 +19,11 @@ const connexion = async () => {
             changeStream.on('change', change => {
                 if(change.operationType === 'insert'){
                     pusher.trigger('posts', 'inserted', {
+                        change: change
+                    })
+                }
+                if(change.operationType === 'update'){
+                    pusher.trigger('posts', 'updated', {
                         change: change
                     })
                 }

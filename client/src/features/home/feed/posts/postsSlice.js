@@ -1,10 +1,11 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {generateUniqueId} from '../../../calcul/calcul'
 import axios from "axios";
 import {ServerInstanceAddress} from "../../../../ServerInstance";
 
 const initialState = {
-    posts: []
+    posts: [],
+    statusLikePost: false,
+    statusLikeComment: false
 }
 
 export const getPosts = createAsyncThunk(
@@ -24,10 +25,7 @@ export const uploadPost = createAsyncThunk(
     'posts/upload',
     async (newPost, thunkAPI) => {
         try {
-            const response = await axios.post(ServerInstanceAddress+"/post/upload", newPost).then(res => {
-                return res.data
-            })
-            return response
+            await axios.post(ServerInstanceAddress+"/post/upload", newPost)
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
         }
@@ -37,10 +35,27 @@ export const addCommentToPostById = createAsyncThunk(
     'posts/comment/upload',
     async (newComment, thunkAPI) => {
         try {
-            const response = await axios.post(ServerInstanceAddress+"/post/comment/upload", newComment).then(res => {
-                return res.data
-            })
-            return response
+            await axios.post(ServerInstanceAddress+"/post/comment/upload", newComment)
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
+
+export const likePostById = createAsyncThunk(
+    'post/like',
+    async (like, thunkAPI) => {
+        try {
+            await axios.post(ServerInstanceAddress+"/post/like", like)
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
+
+export const dislikePostById = createAsyncThunk(
+    'post/dislike',
+    async (like, thunkAPI) => {
+        try {
+            await axios.post(ServerInstanceAddress+"/post/dislike", like)
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
         }
@@ -50,12 +65,12 @@ export const postsSlice = createSlice({
     name: 'posts',
     initialState,
     reducers: {
-        setLikesPostById: {
+        setLikePostById: {
             reducer(state, action){
                 const idPost = action.payload.idPost
                 const username = action.payload.username
                 const index = state.posts.findIndex(p => {
-                    return p.idPost === idPost
+                    return p._id === idPost
                 })
                 if(index !== -1){
                     if(state.posts[index].likes.includes(username)){
@@ -104,55 +119,6 @@ export const postsSlice = createSlice({
                 }
             }
         },
-        addCommentToPostById: {
-            reducer(state, action){
-                const index = state.posts.findIndex(p => {
-                    return p.idPost === action.payload.idPost
-                })
-                if(index !== -1){
-                    const newComment = {
-                        idComment: action.payload.idComment,
-                        imgUserURL: action.payload.imgUserURL,
-                        username: action.payload.username,
-                        text: action.payload.text,
-                        timestamp: Date.now(),
-                        likes: []
-                    }
-                    state.posts[index].comments.push(newComment)
-                }
-            },
-            prepare(idPost, comment, username, imgUserURL){
-                return{
-                    payload:
-                        {
-                            idPost: idPost,
-                            text: comment,
-                            username: username,
-                            imgUserURL: imgUserURL,
-                            idComment: generateUniqueId()
-                        }
-                }
-            }
-        },
-        addPost: {
-            reducer(state, action){
-                state.posts.push(action.payload)
-            },
-            prepare(imgUserURL, username, caption, imgPostURL){
-                return {
-                    payload: {
-                        idPost: generateUniqueId(),
-                        imgUserURL,
-                        username,
-                        timestamp: Date.now(),
-                        caption,
-                        imgPostURL,
-                        comments: [],
-                        likes: []
-                    }
-                }
-            }
-        }
     },
     extraReducers: {
         // GET POSTS
@@ -161,17 +127,32 @@ export const postsSlice = createSlice({
         },
         // UPLOAD POST
         [uploadPost.fulfilled]: (state, action) => {
-            // state.posts.push(action.payload)
+            console.log('Post upload successfully !')
         },
+        // ADD COMMENT TO POST BY ID
         [addCommentToPostById.fulfilled]: (state, action) => {
-            console.log('comment uploaded !')
-            console.log(action.payload)
-        }
+            console.log('Comment upload successfully !')
+        },
+        // LIKE-POST BY ID
+        [likePostById.fulfilled]: (state, action) => {
+            state.statusLikePost = false
+        },
+        [likePostById.pending]: (state, action) => {
+            state.statusLikePost = true
+        },
+        // DISLIKE-POST BY ID
+        [dislikePostById.fulfilled]: (state, action) => {
+            state.statusLikePost = false
+        },
+        [dislikePostById.pending]: (state, action) => {
+            state.statusLikePost = true
+        },
     }
 });
 
-export const {setLikesPostById, setLikeCommentById, addPost} = postsSlice.actions;
+export const {setLikeCommentById, setLikePostById} = postsSlice.actions;
 
 export const selectPosts = (state) => state.posts.posts
+export const selectStatusLikePost = (state) => state.posts.statusLikePost
 
 export default postsSlice.reducer;

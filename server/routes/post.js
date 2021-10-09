@@ -48,4 +48,38 @@ router.post('/comment/upload', (req, res)=>{
     })
 })
 
+router.post('/like', (req, res) => {
+    const idPost = req.body.idPost
+    const username = req.body.username
+    mongoPosts.findOneAndUpdate(
+        {_id: idPost},
+        {
+            $push:{
+                likes: username
+            }
+        }
+    ).then(data => {
+        res.send(data).status(200)
+    }).catch(err => {
+        res.status(500).send(err)
+    })
+})
+
+router.post('/dislike', (req, res) => {
+    const idPost = req.body.idPost
+    const username = req.body.username
+    mongoPosts.findOneAndUpdate(
+        {_id: idPost},
+        {
+            $pull:{
+                likes: username
+            }
+        }
+    ).then(data => {
+        res.send(data).status(200)
+    }).catch(err => {
+        res.status(500).send(err)
+    })
+})
+
 export default router

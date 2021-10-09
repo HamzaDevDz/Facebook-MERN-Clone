@@ -4,7 +4,7 @@ import Avatar from "@material-ui/core/Avatar";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import CommentIcon from '@material-ui/icons/Comment';
 import {useDispatch, useSelector} from "react-redux";
-import {setLikesPostById} from "../postsSlice";
+import {dislikePostById, likePostById, selectStatusLikePost, setLikePostById} from "../postsSlice";
 import {Comment} from "../comment/Comment";
 import {calculateDifferenceTimestamps} from '../../../../calcul/calcul'
 import {UploadComment} from "../uploadComment/UploadComment";
@@ -16,6 +16,7 @@ export const Post = ({idPost, imgUser, username, timestamp, caption, imgPost, li
 
     const dispatch = useDispatch()
     const user = useSelector(selectUser)
+    const statusLikePost = useSelector(selectStatusLikePost)
 
     useEffect(()=>{
         if(likes.includes(user.username)){
@@ -24,14 +25,30 @@ export const Post = ({idPost, imgUser, username, timestamp, caption, imgPost, li
         else{
             document.getElementById(`post_likes_${idPost}`).style.color = 'gray'
         }
-    }, [likes])
+    }, [])
 
+    useEffect(()=>{
+        if(statusLikePost){
+            document.querySelector(`#feed__posts__post__${idPost} .feed__posts__post__states .feed__posts__post__states__likes`).style.pointerEvents = 'none'
+        }
+        else{
+            document.querySelector(`#feed__posts__post__${idPost} .feed__posts__post__states .feed__posts__post__states__likes`).style.pointerEvents = 'auto'
+        }
+    }, [statusLikePost])
 
     const hanldeLikePost = () => {
-        dispatch(setLikesPostById(idPost, user.username))
+        if(!likes.includes(user.username)){
+            dispatch(likePostById({idPost, username: user.username}))
+            document.getElementById(`post_likes_${idPost}`).style.color = 'blue'
+        }
+        else{
+            dispatch(dislikePostById({idPost, username: user.username}))
+            document.getElementById(`post_likes_${idPost}`).style.color = 'gray'
+        }
+        dispatch(setLikePostById(idPost, user.username))
     }
 
-    const handleCommentsPost = (e) => {
+    const displayCommentsPost = (e) => {
         const commentsElement = e.target.parentNode.parentNode.parentNode.parentNode.querySelector('.feed__posts__post__comments')
         if(window.getComputedStyle(commentsElement).getPropertyValue('display') === 'flex'){
             commentsElement.style.display = 'none'
@@ -44,7 +61,7 @@ export const Post = ({idPost, imgUser, username, timestamp, caption, imgPost, li
     }
 
     return (
-        <div className={'feed__posts__post'}>
+        <div className={'feed__posts__post'} id={'feed__posts__post__' + idPost}>
             <div className={'feed__posts__post__head'}>
                 <Avatar className={'feed__posts__post__head__avatar'} alt={username[0]} src={getImage(imgUser)} />
                 <div className={'feed__posts__post__head__user'}>
@@ -72,7 +89,7 @@ export const Post = ({idPost, imgUser, username, timestamp, caption, imgPost, li
                     />{likes.length}
                 </div>
                 <div className={'feed__posts__post__states__comments'}
-                     onClick={handleCommentsPost}
+                     onClick={displayCommentsPost}
                 >
                     <CommentIcon className={'feed__posts__post__states__comments__icon'}
                                  style={{color: 'red'}}
@@ -84,11 +101,11 @@ export const Post = ({idPost, imgUser, username, timestamp, caption, imgPost, li
             {
                 comments.length !== 0 ?
                     <div className={'feed__posts__post__comments'}>
-                        {comments.map(comment=>(
-                            <Comment key={comment.idComment}
+                        {comments.map((comment)=>(
+                            <Comment key={comment._id}
                                      idPost={idPost}
-                                     idComment={comment.idComment}
-                                     imgUserURL={comment.imgUserURL}
+                                     idComment={comment._id}
+                                     imgUserName={comment.imgUserName}
                                      username={comment.username}
                                      timestamp={comment.timestamp}
                                      text={comment.text}
