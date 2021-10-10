@@ -61,6 +61,26 @@ export const dislikePostById = createAsyncThunk(
         }
     })
 
+export const likeCommentById = createAsyncThunk(
+    'post/comment/like',
+    async (like, thunkAPI) => {
+        try {
+            await axios.post(ServerInstanceAddress+"/post/comment/like", like)
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
+
+export const dislikeCommentById = createAsyncThunk(
+    'post/comment/dislike',
+    async (like, thunkAPI) => {
+        try {
+            await axios.post(ServerInstanceAddress+"/post/comment/dislike", like)
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
+
 export const postsSlice = createSlice({
     name: 'posts',
     initialState,
@@ -93,11 +113,11 @@ export const postsSlice = createSlice({
         setLikeCommentById: {
             reducer(state, action){
                 const indexPost = state.posts.findIndex(p => {
-                    return p.idPost === action.payload.idPost
+                    return p._id === action.payload.idPost
                 })
                 if(indexPost !== -1){
                     const indexComment = state.posts[indexPost].comments.findIndex(c => {
-                        return c.idComment === action.payload.idComment
+                        return c._id === action.payload.idComment
                     })
                     if(indexComment !== -1){
                         if(state.posts[indexPost].comments[indexComment].likes.includes(action.payload.username)){
@@ -135,17 +155,25 @@ export const postsSlice = createSlice({
         },
         // LIKE-POST BY ID
         [likePostById.fulfilled]: (state, action) => {
-            state.statusLikePost = false
+
         },
         [likePostById.pending]: (state, action) => {
-            state.statusLikePost = true
+
         },
         // DISLIKE-POST BY ID
         [dislikePostById.fulfilled]: (state, action) => {
-            state.statusLikePost = false
+
         },
         [dislikePostById.pending]: (state, action) => {
-            state.statusLikePost = true
+
+        },
+        // LIKE-COMMENT BY ID
+        [likeCommentById.fulfilled]: (state, action) => {
+
+        },
+        // DISLIKE-COMMENT BY ID
+        [dislikeCommentById.fulfilled]: (state, action) => {
+
         },
     }
 });
@@ -153,6 +181,5 @@ export const postsSlice = createSlice({
 export const {setLikeCommentById, setLikePostById} = postsSlice.actions;
 
 export const selectPosts = (state) => state.posts.posts
-export const selectStatusLikePost = (state) => state.posts.statusLikePost
 
 export default postsSlice.reducer;

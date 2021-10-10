@@ -82,4 +82,48 @@ router.post('/dislike', (req, res) => {
     })
 })
 
+router.post('/comment/like', (req, res) => {
+    const idPost = req.body.idPost
+    const idComment = req.body.idComment
+    const username = req.body.username
+    console.log(idPost)
+    console.log(idComment)
+    console.log(username)
+    mongoPosts.findOneAndUpdate(
+        {_id: idPost, comments: {$elemMatch:{_id: idComment}}},
+        {
+            $push:{
+                comments: {
+                    likes: username
+                }
+            }
+        }
+    ).then(data => {
+        console.log(data)
+        res.send(data).status(200)
+    }).catch(err => {
+        res.status(500).send(err)
+    })
+})
+
+router.post('/comment/dislike', (req, res) => {
+    const idPost = req.body.idPost
+    const idComment = req.body.idComment
+    const username = req.body.username
+    mongoPosts.findOneAndUpdate(
+        {_id: idPost, comments: {$elemMatch:{_id: idComment}}},
+        {
+            $pull:{
+                comments: {
+                    likes: username
+                }
+            }
+        }
+    ).then(data => {
+        res.send(data).status(200)
+    }).catch(err => {
+        res.status(500).send(err)
+    })
+})
+
 export default router

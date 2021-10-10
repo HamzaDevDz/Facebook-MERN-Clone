@@ -1,10 +1,10 @@
-import React, {useEffect} from "react"
+import React, {useEffect, useState} from "react"
 import './Post.css'
 import Avatar from "@material-ui/core/Avatar";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import CommentIcon from '@material-ui/icons/Comment';
 import {useDispatch, useSelector} from "react-redux";
-import {dislikePostById, likePostById, selectStatusLikePost, setLikePostById} from "../postsSlice";
+import {dislikePostById, likePostById, setLikePostById} from "../postsSlice";
 import {Comment} from "../comment/Comment";
 import {calculateDifferenceTimestamps} from '../../../../calcul/calcul'
 import {UploadComment} from "../uploadComment/UploadComment";
@@ -16,7 +16,8 @@ export const Post = ({idPost, imgUser, username, timestamp, caption, imgPost, li
 
     const dispatch = useDispatch()
     const user = useSelector(selectUser)
-    const statusLikePost = useSelector(selectStatusLikePost)
+    const [timer, setTimer] = useState(0)
+    const [flag, setFlag] = useState(0)
 
     useEffect(()=>{
         if(likes.includes(user.username)){
@@ -27,23 +28,34 @@ export const Post = ({idPost, imgUser, username, timestamp, caption, imgPost, li
         }
     }, [])
 
-    useEffect(()=>{
-        if(statusLikePost){
-            document.querySelector(`#feed__posts__post__${idPost} .feed__posts__post__states .feed__posts__post__states__likes`).style.pointerEvents = 'none'
-        }
-        else{
-            document.querySelector(`#feed__posts__post__${idPost} .feed__posts__post__states .feed__posts__post__states__likes`).style.pointerEvents = 'auto'
-        }
-    }, [statusLikePost])
-
     const hanldeLikePost = () => {
+        clearTimeout(timer)
         if(!likes.includes(user.username)){
-            dispatch(likePostById({idPost, username: user.username}))
             document.getElementById(`post_likes_${idPost}`).style.color = 'blue'
+            if(flag === 1)
+            {
+                setFlag(0)
+            }
+            else{
+                setFlag(1)
+                setTimer(setTimeout(()=>{
+                    dispatch(likePostById({idPost, username: user.username}))
+                    setFlag(0)
+                },3000))
+            }
         }
         else{
-            dispatch(dislikePostById({idPost, username: user.username}))
             document.getElementById(`post_likes_${idPost}`).style.color = 'gray'
+            if(flag === 1){
+                setFlag(0)
+            }
+            else{
+                setFlag(1)
+                setTimer(setTimeout(()=>{
+                    dispatch(dislikePostById({idPost, username: user.username}))
+                    setFlag(0)
+                },3000))
+            }
         }
         dispatch(setLikePostById(idPost, user.username))
     }
