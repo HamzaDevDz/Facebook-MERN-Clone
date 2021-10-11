@@ -90,14 +90,19 @@ router.post('/comment/like', (req, res) => {
     console.log(idComment)
     console.log(username)
     mongoPosts.findOneAndUpdate(
-        {_id: idPost, comments: {$elemMatch:{_id: idComment}}},
+        {_id: idPost},
         {
             $push:{
-                comments: {
-                    likes: username
-                }
+                'comments.$[filter].likes': username
             }
-        }
+        },
+    {
+        arrayFilters: [
+            {
+                'filter._id': idComment
+            }
+        ]
+    }
     ).then(data => {
         console.log(data)
         res.send(data).status(200)
@@ -111,13 +116,18 @@ router.post('/comment/dislike', (req, res) => {
     const idComment = req.body.idComment
     const username = req.body.username
     mongoPosts.findOneAndUpdate(
-        {_id: idPost, comments: {$elemMatch:{_id: idComment}}},
+        {_id: idPost},
         {
             $pull:{
-                comments: {
-                    likes: username
-                }
+                'comments.$[filter].likes': username
             }
+        },
+        {
+            arrayFilters: [
+                {
+                    'filter._id': idComment
+                }
+            ]
         }
     ).then(data => {
         res.send(data).status(200)

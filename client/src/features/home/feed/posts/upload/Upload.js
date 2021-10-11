@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react"
 import './Upload.css'
 import Avatar from "@material-ui/core/Avatar";
-import VideoCallIcon from '@material-ui/icons/VideoCall';
 import ImageIcon from '@material-ui/icons/Image';
 import MoodIcon from '@material-ui/icons/Mood';
 import {useDispatch, useSelector} from "react-redux";
@@ -15,7 +14,7 @@ export const Upload = () => {
 
     const [caption, setCaption] = useState('')
     const [video, setVideo] = useState(undefined)
-    const [image, setImage] = useState(undefined)
+    const [media, setMedia] = useState(undefined)
     const [mood, setMood] = useState(undefined)
 
     const user = useSelector(selectUser)
@@ -33,29 +32,18 @@ export const Upload = () => {
                 timestamp: Date.now(),
                 likes: [],
                 comments: [],
-                videoPost: '',
                 mood: ''
             }
-            if(image){
+            if(media){
                 const formData = new FormData()
-                formData.append('file', image)
-                axios.post(ServerInstanceAddress+'/image/upload', formData).then(res => {
+                formData.append('file', media)
+                axios.post(ServerInstanceAddress+'/media/upload', formData).then(res => {
                     newPost['imgPost'] = res.data
                     dispatch(uploadPost(newPost))
                 })
             }
-            else{
-                newPost['imgPost'] = ''
-                if(video){
-
-                }
-            }
-            if(mood){
-
-            }
-            // console.log(newPost)
             setCaption('')
-            setImage(undefined)
+            setMedia(undefined)
             setVideo(undefined)
             setMood(undefined)
         }
@@ -78,23 +66,13 @@ export const Upload = () => {
                     />
                 </div>
                 <div className={'feed__upload__multi'}>
-                    <label className={'feed__upload__multi__label feed__upload__multi__video'} htmlFor={'video'}>
-                        <VideoCallIcon className={'feed__upload__multi__label__icon'} color={'error'} />
-                        Vidéo
-                        <input id={'video'} style={{display: 'none'}} type={'file'} value={video}
-                               onChange={e => {
-                                   if(e.target.files[0]){
-                                       setVideo(e.target.files[0])
-                                   }
-                               }}/>
-                    </label>
-                    <label className={'feed__upload__multi__label feed__upload__multi__image'} htmlFor={'image'}>
+                    <label className={'feed__upload__multi__label feed__upload__multi__image'} htmlFor={'media'}>
                         <ImageIcon className={'feed__upload__multi__label__icon'} color={'error'} />
-                        Image
-                        <input id={'image'} style={{display: 'none'}} type={'file'}
+                        Image / Video
+                        <input id={'media'} style={{display: 'none'}} type={'file'}
                                onChange={e => {
                                    if(e.target.files[0]){
-                                       setImage(e.target.files[0])
+                                       setMedia(e.target.files[0])
                                    }
                                }}/>
                     </label>

@@ -26,25 +26,14 @@ export const Header = () => {
     const [openPlus, setOpenPlus] = useState(false)
     const [picProfile, setPicProfile] = useState('')
 
-    const hidePlus = () => {
-        document.querySelector('.header__plus').classList.remove('open')
-        setOpenPlus(false)
-        document.querySelector('.header__account__btnPlus__iconPlus').style.color = '#6E6F70'
-        // window.removeEventListener('click', eventListnerBox)
-    }
-    const showPlus = () => {
-        document.querySelector('.header__plus').classList.add('open')
-        setOpenPlus(true)
-        document.querySelector('.header__account__btnPlus__iconPlus').style.color = 'blue'
-        // window.addEventListener('click', eventListnerBox)
-    }
-
     const handleOpenPlus = (e) => {
         if(!openPlus){
-            showPlus()
+            setOpenPlus(true)
+            document.querySelector('.header__account__btnPlus__iconPlus').style.color = 'blue'
         }
         else{
-            hidePlus()
+            setOpenPlus(false)
+            document.querySelector('.header__account__btnPlus__iconPlus').style.color = '#6E6F70'
         }
     }
 
@@ -52,9 +41,29 @@ export const Header = () => {
     //     const box = document.querySelector('.header__plus')
     //     const btn = document.querySelector('.header__account__btnPlus')
     //     if(e.target !== box && e.target !== btn && !box.contains(e.target) && !btn.contains(e.target)){
-    //         hidePlus()
+    //         setOpenPlus(false)
+    //         document.querySelector('.header__account__btnPlus__iconPlus').style.color = '#6E6F70'
     //     }
     // }
+
+    document.onclick = (e) => {
+        // e.preventDefault()
+        console.log(e.target)
+        const btnPlus = document.querySelector('.header__account__btn')
+        const btnPlusIcon = document.querySelector('.header__account__btn__icon')
+        console.log(btnPlus)
+        console.log(btnPlusIcon)
+        if(btnPlus !== e.target && btnPlusIcon !== e.target){
+            if(openPlus){
+                let container = document.querySelector('.header__plus')
+                console.log(container)
+                if (!container.contains(e.target)) {
+                    setOpenPlus(false)
+                    document.querySelector('.header__account__btnPlus__iconPlus').style.color = '#6E6F70'
+                }
+            }
+        }
+    }
 
     const handleLogOut = () => {
         dispatch(logOut())
@@ -102,24 +111,30 @@ export const Header = () => {
                     <KeyboardArrowDownIcon className={'header__account__btn__icon header__account__btnPlus__iconPlus'} fontSize={'small'} color="action"/>
                 </IconButton>
             </div>
-            <div className={'header__plus'}>
-                <div className={'header__plus__btn header__plus__profile'}>
-                    <Avatar className={'header__plus__profile__avatar'} alt={user.username[0].toUpperCase()} src={getImage(user.imgUserName)} />
-                    <div className={'header__plus__profile__text'}>
-                        <strong>{user.firstName} {user.name}</strong>
-                        <p className={'header__plus__profile__text__placeholder'}>Go to the profile</p>
+            {
+                openPlus ?
+                    <div className={'header__plus'}>
+                        <div className={'header__plus__btn header__plus__profile'}>
+                            <Avatar className={'header__plus__profile__avatar'} alt={user.username[0].toUpperCase()} src={getImage(user.imgUserName)} />
+                            <div className={'header__plus__profile__text'}>
+                                <strong>{user.firstName} {user.name}</strong>
+                                <p className={'header__plus__profile__text__placeholder'}>Go to the profile</p>
+                            </div>
+                        </div>
+                        <div className={'header__plus__btn header__plus__settings'}>
+                            <SettingsIcon className={'header__plus__btn__icon'} /> Setting
+                        </div>
+                        <div className={'header__plus__btn header__plus__logout'}
+                             onClick={handleLogOut}
+                        >
+                            <ExitToAppIcon className={'header__plus__btn__icon'}/>
+                            Log Out
+                        </div>
                     </div>
-                </div>
-                <div className={'header__plus__btn header__plus__settings'}>
-                    <SettingsIcon className={'header__plus__btn__icon'} /> Setting
-                </div>
-                <div className={'header__plus__btn header__plus__logout'}
-                     onClick={handleLogOut}
-                >
-                    <ExitToAppIcon className={'header__plus__btn__icon'}/>
-                    Log Out
-                </div>
-            </div>
+                    :
+                    ''
+            }
+
         </div>
     )
 }

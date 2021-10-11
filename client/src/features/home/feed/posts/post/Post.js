@@ -10,6 +10,10 @@ import {calculateDifferenceTimestamps} from '../../../../calcul/calcul'
 import {UploadComment} from "../uploadComment/UploadComment";
 import {selectUser} from "../../../../login/loginSlice";
 import {getImage} from "../../../../../ServerInstance";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton"
+import path from "path"
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 
 export const Post = ({idPost, imgUser, username, timestamp, caption, imgPost, likes, comments}) => {
@@ -18,6 +22,7 @@ export const Post = ({idPost, imgUser, username, timestamp, caption, imgPost, li
     const user = useSelector(selectUser)
     const [timer, setTimer] = useState(0)
     const [flag, setFlag] = useState(0)
+    const [displayComments, setDisplayComments] = useState(true)
 
     useEffect(()=>{
         if(likes.includes(user.username)){
@@ -61,15 +66,22 @@ export const Post = ({idPost, imgUser, username, timestamp, caption, imgPost, li
     }
 
     const displayCommentsPost = (e) => {
-        const commentsElement = e.target.parentNode.parentNode.parentNode.parentNode.querySelector('.feed__posts__post__comments')
-        if(window.getComputedStyle(commentsElement).getPropertyValue('display') === 'flex'){
-            commentsElement.style.display = 'none'
-            e.target.querySelector('.feed__posts__post__states__comments__icon').style.color = 'gray'
+
+        if(displayComments){
+            setDisplayComments(false)
+        }else{
+            setDisplayComments(true)
         }
-        else{
-            commentsElement.style.display = 'flex'
-            e.target.querySelector('.feed__posts__post__states__comments__icon').style.color = 'red'
-        }
+
+        // const commentsElement = e.target.parentNode.parentNode.parentNode.parentNode.querySelector('.feed__posts__post__comments')
+        // if(window.getComputedStyle(commentsElement).getPropertyValue('display') === 'flex'){
+        //     commentsElement.style.display = 'none'
+        //     e.target.querySelector('.feed__posts__post__states__comments__icon').style.color = 'gray'
+        // }
+        // else{
+        //     commentsElement.style.display = 'flex'
+        //     e.target.querySelector('.feed__posts__post__states__comments__icon').style.color = 'red'
+        // }
     }
 
     return (
@@ -88,43 +100,57 @@ export const Post = ({idPost, imgUser, username, timestamp, caption, imgPost, li
             </div>
             {
                 imgPost !== null ?
-                    <img src={getImage(imgPost)} alt={''} className={'feed__posts__post__image'} />
+                    ['.jpg', '.jpeg', '.png'].includes(path.extname(imgPost)) ?
+                        <img src={getImage(imgPost)} alt={''} className={'feed__posts__post__media'} />
+                        :
+                        <video controls className={'feed__posts__post__media'}>
+                            <source src={getImage(imgPost)}/>
+                        </video>
+                        // <video src={getImage(imgPost)} className={'feed__posts__post__media'} />
                     :
                     ''
             }
             <div className={'feed__posts__post__states'}>
-                <div className={'feed__posts__post__states__likes'}
+                <IconButton className={'feed__posts__post__states__likes'}
                      onClick={hanldeLikePost}
                 >
                     <ThumbUpAltIcon className={'feed__posts__post__states__likes__icon'}
                                     id={`post_likes_${idPost}`}
                     />{likes.length}
-                </div>
-                <div className={'feed__posts__post__states__comments'}
+                </IconButton>
+                <IconButton className={'feed__posts__post__states__comments'}
                      onClick={displayCommentsPost}
                 >
                     <CommentIcon className={'feed__posts__post__states__comments__icon'}
                                  style={{color: 'red'}}
                     />
                     <span>{comments.length}</span>
-                </div>
+                </IconButton>
             </div>
             <UploadComment idPost={idPost} />
             {
                 comments.length !== 0 ?
-                    <div className={'feed__posts__post__comments'}>
-                        {comments.map((comment)=>(
-                            <Comment key={comment._id}
-                                     idPost={idPost}
-                                     idComment={comment._id}
-                                     imgUserName={comment.imgUserName}
-                                     username={comment.username}
-                                     timestamp={comment.timestamp}
-                                     text={comment.text}
-                                     likes={comment.likes}
-                            />
-                        ))}
-                    </div>
+                    displayComments ?
+                        <div className={'feed__posts__post__comments'}>
+                            {comments.map((comment)=>(
+                                <Comment key={comment._id}
+                                         idPost={idPost}
+                                         idComment={comment._id}
+                                         imgUserName={comment.imgUserName}
+                                         username={comment.username}
+                                         timestamp={comment.timestamp}
+                                         text={comment.text}
+                                         likes={comment.likes}
+                                />
+                            ))}
+                        </div>
+                        :
+                        <Button className={'feed__posts__post__moreComments'} variant="contained" color="primary"
+                                onClick={()=>setDisplayComments(true)}
+                        >
+                            <MoreHorizIcon fontSize={'medium'}></MoreHorizIcon>
+                        </Button>
+
                     :
                     ''
             }

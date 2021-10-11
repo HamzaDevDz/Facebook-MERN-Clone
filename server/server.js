@@ -24,7 +24,7 @@ app.get('/', (req, res)=>res.status(200).send('Hello world'))
 
 app.use("/post", post)
 app.use("/user", user)
-app.use("/image", upload)
+app.use("/media", upload)
 
 // listner --------------------------------------------------------------------------------------------
 app.listen(port, ()=>console.log('listening on localhost : ' + port))

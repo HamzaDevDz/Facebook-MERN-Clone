@@ -29,9 +29,8 @@
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
     width: 90%;
-    /*padding: 10px 0;*/
 }
 .feed__upload__multi__label{
     display: flex;

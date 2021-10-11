@@ -5,7 +5,6 @@ const postModel = mongoose.Schema({
     imgUser: String,
     caption: String,
     imgPost: String,
-    videoPost: String,
     mood: String,
     likes: [String],
     comments: [{

@@ -9,11 +9,12 @@ let gfs;
 const conn = mongoose.connection;
 conn.once("open", () => {
     gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection("images");
+    gfs.collection("medias");
 })
 
 router.post("/upload", upload.single("file"), async (req, res) => {
-    if (req.file === undefined) return res.send("you must select a file.")
+    if (req.file === undefined) return res.send("File must be selected !")
+    console.log(req.file)
     return res.send(req.file.filename)
 });
 

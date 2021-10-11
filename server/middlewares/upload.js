@@ -9,16 +9,25 @@ const storage = new GridFsStorage({
     url: mongoURI,
     options: { useNewUrlParser: true, useUnifiedTopology: true },
     file: (req, file) => {
-        const match = ["image/png", "image/jpeg", "image/jpg"];
+        const matchImage = ["image/png", "image/jpeg", "image/jpg"]
+        const matchVideo = ["video/mp4", "video/avi", "video/wmv"];
 
-        if (match.indexOf(file.mimetype) === -1) {
-            return `image-${Date.now()}${path.extname(file.originalname)}`
+        if (matchImage.indexOf(file.mimetype) === -1 && matchVideo.indexOf(file.mimetype) === -1) {
+            // return `file-${Date.now()}${path.extname(file.originalname)}`
+            return 'Incorrect format'
         }
 
-        return {
-            bucketName: "images",
-            filename: `image-${Date.now()}${path.extname(file.originalname)}`
-        };
+        if(matchImage.indexOf(file.mimetype) !== -1){
+            return {
+                bucketName: "medias",
+                filename: `image-${Date.now()}${path.extname(file.originalname)}`
+            }
+        }
+
+        return{
+            bucketName: "medias",
+            filename: `video-${Date.now()}${path.extname(file.originalname)}`
+        }
     },
 })
 

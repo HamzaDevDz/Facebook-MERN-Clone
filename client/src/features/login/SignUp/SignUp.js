@@ -39,7 +39,7 @@ export const SignUp = () => {
                     // console.log(image)
                     const formData = new FormData()
                     formData.append('file', image)
-                    axios.post(ServerInstanceAddress+'/image/upload', formData).then((res)=>{
+                    axios.post(ServerInstanceAddress+'/media/upload', formData).then((res)=>{
                         const newUser = {
                             name: name.toUpperCase(),
                             firstName,
