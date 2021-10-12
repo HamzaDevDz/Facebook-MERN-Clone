@@ -41,6 +41,27 @@
     border-radius: 25px;
 }
 
+/* HEADER SEARCH BOX */
+.header__searchBox{
+    position: absolute;
+    left: 5px;
+    top: 60px;
+    padding: 5px;
+    width: 300px;
+    height: 200px;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+    opacity: 0.9;
+}
+.header__searchBox__friend{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 /* HEADER NAVIGATION */
 .header__nav{
     padding: 5px 0;

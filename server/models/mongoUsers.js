@@ -7,7 +7,9 @@ const userModel = mongoose.Schema({
     phone: String,
     imgUserName: String,
     username: String,
-    password: String
+    password: String,
+    idFriends: [String],
+    idRequests: [String]
 })
 
 export default mongoose.model('users', userModel)

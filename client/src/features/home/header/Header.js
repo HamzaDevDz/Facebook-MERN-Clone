@@ -15,6 +15,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {logOut, selectUser} from "../../login/loginSlice";
 import {getImage} from "../../../ServerInstance";
 import {useHistory} from "react-router-dom"
+import {searchFriends, selectFriends, selectStatusSearch} from "./headerSlice";
 
 export const Header = () => {
 
@@ -25,11 +26,25 @@ export const Header = () => {
 
     const [openPlus, setOpenPlus] = useState(false)
     const [picProfile, setPicProfile] = useState('')
+    const [search, setSearch] = useState('')
+
+    const friends = useSelector(selectFriends)
+    const statusSearch = useSelector(selectStatusSearch)
+
+    useEffect(()=>{
+        if(search !== ''){
+            console.log('search Friend')
+            dispatch(searchFriends(search))
+        }
+    }, [search])
 
     const handleOpenPlus = (e) => {
         if(!openPlus){
             setOpenPlus(true)
             document.querySelector('.header__account__btnPlus__iconPlus').style.color = 'blue'
+            document.addEventListener('click', ()=>{
+
+            })
         }
         else{
             setOpenPlus(false)
@@ -37,27 +52,13 @@ export const Header = () => {
         }
     }
 
-    // const eventListnerBox = (e) => {
-    //     const box = document.querySelector('.header__plus')
-    //     const btn = document.querySelector('.header__account__btnPlus')
-    //     if(e.target !== box && e.target !== btn && !box.contains(e.target) && !btn.contains(e.target)){
-    //         setOpenPlus(false)
-    //         document.querySelector('.header__account__btnPlus__iconPlus').style.color = '#6E6F70'
-    //     }
-    // }
-
     document.onclick = (e) => {
-        // e.preventDefault()
-        console.log(e.target)
-        const btnPlus = document.querySelector('.header__account__btn')
-        const btnPlusIcon = document.querySelector('.header__account__btn__icon')
-        console.log(btnPlus)
-        console.log(btnPlusIcon)
-        if(btnPlus !== e.target && btnPlusIcon !== e.target){
-            if(openPlus){
-                let container = document.querySelector('.header__plus')
-                console.log(container)
-                if (!container.contains(e.target)) {
+        // console.log(e.target)
+        if(openPlus){
+            const btnPlus = document.querySelector('.header__account__btnPlus')
+            if(!btnPlus.contains(e.target)){
+                let headerPlus = document.querySelector('.header__plus')
+                if (!headerPlus.contains(e.target)) {
                     setOpenPlus(false)
                     document.querySelector('.header__account__btnPlus__iconPlus').style.color = '#6E6F70'
                 }
@@ -73,14 +74,34 @@ export const Header = () => {
     return (
         <div className={'header'}>
             <div className={'header__search'}>
-                <img className={'header__search__img'} src={'icons/facebook_icon.png'} alt={user.username[0].toUpperCase()} />
+                <img className={'header__search__img'} src={'icons/facebook_icon.png'} alt={''} />
                 <div className={'header__search__barSearch'}>
                     <SearchIcon className={'header__search__barSearch__icon'} fontSize="medium" color="action"/>
-                    <input className={'header__search__barSearch__input'} placeholder="Search"
+                    <input className={'header__search__barSearch__input'} placeholder="Search Friends"
                            type={'text'}
+                           value={search}
+                           onChange={(e)=>setSearch(e.target.value)}
                     />
                 </div>
             </div>
+            {
+                search.length !== 0 ?
+                    <div className={'header__searchBox'}>
+                        {
+                            friends ?
+                                friends.map(f => (
+                                    <div className={'header__searchBox__friend'}>
+                                        <Avatar src={getImage(f.imgUserName)} alt={f.username.toUpperCase()} />
+                                        {f.firstName} {f.name}
+                                    </div>
+                                ))
+                                :
+                                ''
+                        }
+                    </div>
+                    :
+                    ''
+            }
             <div className={'header__nav'}>
                 <div className={'header__nav__btn header__nav__home selected'}>
                     <HomeIcon className={'header__nav__btn__icon'} color={'primary'} fontSize={'medium'}/>

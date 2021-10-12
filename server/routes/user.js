@@ -34,6 +34,32 @@ router.post('/retrieve', (req, res)=>{
     })
 })
 
+router.get('/search', (req, res)=>{
+    console.log(req.query.search)
+    const search = req.query.search
+    // $or : [
+    //     {name: {$regex: '/*'+search+'*/'}, $option: 'is'},
+    //     {firstName: {$regex: '/*'+search+'*/'}, $option: 'is'}
+    // ]
+    mongoUsers.find({
+            name: {$in: [/^search^/]}
+    },
+        (err, data)=>{
+        if(err){
+            res.status(500).send(err)
+        }
+        else{
+            if(!data || data.length === 0){
+                res.status(404).json({err: 'Users not found'})
+            }
+            else{
+                console.log(data)
+                res.status(200).send(data)
+            }
+        }
+    })
+})
+
 export default router
 
 // module.exports = router;
