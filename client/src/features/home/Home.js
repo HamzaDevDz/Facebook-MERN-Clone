@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react'
+import './Home.css'
 import {Header} from "./header/Header.js";
 import {Feed} from "./feed/Feed.js";
 import {Sidebar} from "./sidebar/Sidebar.js";
@@ -21,7 +22,7 @@ export const Home = () => {
         user
             ?
                 <div className={'home'}>
-                    <Header />
+                    {/*<Header />*/}
                     <Feed />
                     <Sidebar />
                 </div>

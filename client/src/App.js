@@ -3,6 +3,7 @@ import {Redirect, Route, Switch, BrowserRouter as Router} from "react-router-dom
 import {Login} from "./features/login/Login";
 import {SignUp} from "./features/login/SignUp/SignUp";
 import {Home} from "./features/home/Home";
+import {Header} from "./features/home/header/Header";
 
 function App() {
   return (
@@ -11,17 +12,16 @@ function App() {
             <Switch>
                 <Route exact path={'/login'} component={Login}/>
                 <Route exact path={'/signUp'} component={SignUp} />
-                <Route exact path={'/home'} component={Home} />
-                {/*<Route exact*/}
-                {/*       path={'/home'}*/}
-                {/*       render={()=>(*/}
-                {/*           <React.Fragment>*/}
-                {/*               <Header/>*/}
-                {/*               <Feed />*/}
-                {/*               <Sidebar />*/}
-                {/*           </React.Fragment>*/}
-                {/*       )}*/}
-                {/*/>*/}
+                {/*<Route exact path={'/home'} component={Home} />*/}
+                <Route exact
+                       path={'/home'}
+                       render={()=>(
+                           <React.Fragment>
+                               <Header/>
+                               <Home />
+                           </React.Fragment>
+                       )}
+                />
                 <Redirect to="/login" />
             </Switch>
         </div>

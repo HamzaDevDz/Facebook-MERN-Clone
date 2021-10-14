@@ -16,6 +16,9 @@ import {logOut, selectUser} from "../../login/loginSlice";
 import {getImage} from "../../../ServerInstance";
 import {useHistory} from "react-router-dom"
 import {searchFriends, selectFriends, selectStatusSearch} from "./headerSlice";
+import CircularProgress from '@mui/material/CircularProgress';
+import PersonAddDisabledOutlinedIcon from '@mui/icons-material/PersonAddDisabledOutlined';
+
 
 export const Header = () => {
 
@@ -27,14 +30,34 @@ export const Header = () => {
     const [openPlus, setOpenPlus] = useState(false)
     const [picProfile, setPicProfile] = useState('')
     const [search, setSearch] = useState('')
+    const [focus, setFocus] = useState(false)
 
     const friends = useSelector(selectFriends)
     const statusSearch = useSelector(selectStatusSearch)
 
     useEffect(()=>{
+        const home = document.querySelector('.home')
+        if(home !== null) {
+            if (focus) {
+                home.style.filter = 'brightness(80%)'
+            } else {
+                home.style.filter = 'brightness(100%)'
+            }
+        }
+
+    }, [focus])
+
+    useEffect(()=>{
         if(search !== ''){
-            console.log('search Friend')
             dispatch(searchFriends(search))
+            if(!focus){
+                setFocus(true)
+            }
+        }
+        else{
+            if(focus){
+                setFocus(false)
+            }
         }
     }, [search])
 
@@ -54,15 +77,28 @@ export const Header = () => {
 
     document.onclick = (e) => {
         // console.log(e.target)
+        const inputSeach = document.querySelector('.header__search__barSearch__input')
+        if(inputSeach === document.activeElement){
+            setFocus(true)
+        }
+        if(search !== '' && focus && !inputSeach.contains(e.target)){
+            const searchBox = document.querySelector('.header__searchBox')
+            if(!searchBox.contains(e.target)){
+                setFocus(false)
+            }
+        }
         if(openPlus){
             const btnPlus = document.querySelector('.header__account__btnPlus')
-            if(!btnPlus.contains(e.target)){
-                let headerPlus = document.querySelector('.header__plus')
-                if (!headerPlus.contains(e.target)) {
-                    setOpenPlus(false)
-                    document.querySelector('.header__account__btnPlus__iconPlus').style.color = '#6E6F70'
+            if(btnPlus !== null){
+                if(!btnPlus.contains(e.target)){
+                    let headerPlus = document.querySelector('.header__plus')
+                    if (!headerPlus.contains(e.target)) {
+                        setOpenPlus(false)
+                        document.querySelector('.header__account__btnPlus__iconPlus').style.color = '#6E6F70'
+                    }
                 }
             }
+
         }
     }
 
@@ -85,20 +121,32 @@ export const Header = () => {
                 </div>
             </div>
             {
-                search.length !== 0 ?
-                    <div className={'header__searchBox'}>
-                        {
-                            friends ?
-                                friends.map(f => (
-                                    <div className={'header__searchBox__friend'}>
-                                        <Avatar src={getImage(f.imgUserName)} alt={f.username.toUpperCase()} />
-                                        {f.firstName} {f.name}
-                                    </div>
-                                ))
-                                :
-                                ''
-                        }
-                    </div>
+                focus ?
+                    search.length !== 0 ?
+                        <div className={'header__searchBox'}>
+                            {
+                                !statusSearch ?
+                                    friends.length !== 0 ?
+                                        friends.map(f => (
+                                            <div className={'header__searchBox__friend'}>
+                                                <Avatar src={getImage(f.imgUserName)} alt={f.username.toUpperCase()}
+                                                        className={'header__searchBox__friend__avatar'}
+                                                />
+                                                {f.firstName} {f.name}
+                                            </div>
+                                        ))
+                                        :
+                                        <div className={'header__searchBox__noresult'}>
+                                            <PersonAddDisabledOutlinedIcon className={'header__searchBox__noresult__icon'} />
+                                            <p className={'header__searchBox__noresult__text'}>No Result</p>
+                                        </div>
+
+                                    :
+                                    <CircularProgress color="secondary" />
+                            }
+                        </div>
+                        :
+                        ''
                     :
                     ''
             }
