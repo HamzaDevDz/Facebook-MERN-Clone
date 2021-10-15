@@ -15,8 +15,8 @@ const pusher = new Pusher({
 const connexion = async () => {
     try {
         mongoose.connection.once('open', ()=>{
-            const changeStream = mongoose.connection.collection('posts').watch()
-            changeStream.on('change', change => {
+            const changeStreamPosts = mongoose.connection.collection('posts').watch()
+            changeStreamPosts.on('change', change => {
                 if(change.operationType === 'insert'){
                     pusher.trigger('posts', 'inserted', {
                         change: change
@@ -28,7 +28,28 @@ const connexion = async () => {
                     })
                 }
                 else{
-                    console.log('Error triggering Pusher')
+                    console.log('Posts : Error triggering Pusher')
+                }
+            })
+            const changeStreamUsers = mongoose.connection.collection('users').watch()
+            changeStreamPosts.on('change', change => {
+                if(change.operationType === 'insert'){
+                    console.log('users updated Server')
+                    pusher.trigger('users', 'inserted', {
+                        change: change
+                    })
+                }
+                else{
+                    console.log('Users : Error triggering Pusher')
+                }
+                if(change.operationType === 'update'){
+                    console.log('users updated Server')
+                    pusher.trigger('users', 'updated', {
+                        change: change
+                    })
+                }
+                else{
+                    console.log('Users : Error triggering Pusher')
                 }
             })
         })

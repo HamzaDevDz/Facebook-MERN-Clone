@@ -15,10 +15,15 @@ import {useDispatch, useSelector} from "react-redux";
 import {logOut, selectUser} from "../../login/loginSlice";
 import {getImage} from "../../../ServerInstance";
 import {useHistory} from "react-router-dom"
-import {searchFriends, selectFriends, selectStatusSearch} from "./headerSlice";
+import {disinviteFriend, inviteFriend, searchFriends, selectFriends, selectStatusSearch} from "./headerSlice";
 import CircularProgress from '@mui/material/CircularProgress';
 import PersonAddDisabledOutlinedIcon from '@mui/icons-material/PersonAddDisabledOutlined';
+import Button from "@mui/material/Button";
+import Pusher from 'pusher-js'
 
+const pusher = new Pusher('67843c3bf2c33b4e1d28', {
+    cluster: 'eu'
+});
 
 export const Header = () => {
 
@@ -49,15 +54,7 @@ export const Header = () => {
 
     useEffect(()=>{
         if(search !== ''){
-            dispatch(searchFriends(search))
-            if(!focus){
-                setFocus(true)
-            }
-        }
-        else{
-            if(focus){
-                setFocus(false)
-            }
+            dispatch(searchFriends({search: search, idUser: user._id}))
         }
     }, [search])
 
@@ -81,9 +78,13 @@ export const Header = () => {
         if(inputSeach === document.activeElement){
             setFocus(true)
         }
-        if(search !== '' && focus && !inputSeach.contains(e.target)){
+        if(focus && !inputSeach.contains(e.target)){
             const searchBox = document.querySelector('.header__searchBox')
-            if(!searchBox.contains(e.target)){
+            if(searchBox !== null){
+                if(!searchBox.contains(e.target)){
+                    setFocus(false)
+                }
+            }else{
                 setFocus(false)
             }
         }
@@ -107,6 +108,22 @@ export const Header = () => {
         history.push('/login')
     }
 
+    useEffect(()=>{
+        if(user === null || user.length === 0){
+            history.push('/login')
+        }
+        const channel = pusher.subscribe('users');
+        channel.bind('inserted', function(data) {
+            console.log('inserted user Client')
+            dispatch(searchFriends({search: search, idUser: user._id}))
+        })
+        channel.bind('updated', function(data) {
+            console.log('updated user Client')
+            dispatch(searchFriends({search: search, idUser: user._id}))
+        })
+    }, [])
+
+
     return (
         <div className={'header'}>
             <div className={'header__search'}>
@@ -128,12 +145,31 @@ export const Header = () => {
                                 !statusSearch ?
                                     friends.length !== 0 ?
                                         friends.map(f => (
-                                            <div className={'header__searchBox__friend'}>
-                                                <Avatar src={getImage(f.imgUserName)} alt={f.username.toUpperCase()}
-                                                        className={'header__searchBox__friend__avatar'}
-                                                />
-                                                {f.firstName} {f.name}
-                                            </div>
+                                            <div className={'header__searchBox__friend'} key={f._id}>
+                                                <div className={'header__searchBox__friend__information'}>
+                                                    <Avatar src={getImage(f.imgUserName)} alt={f.username.toUpperCase()}
+                                                            className={'header__searchBox__friend__information__avatar'}
+                                                    />
+                                                    {f.firstName} {f.name}
+                                                </div>
+                                                {
+                                                    !f.idRequests.includes(user._id) ?
+                                                        <Button variant="contained"
+                                                                className={'header__searchBox__friend__btn'}
+                                                                onClick={() => {
+                                                                    dispatch(inviteFriend({idUser: user._id, idRequest: f._id}))
+                                                                }}
+                                                        >Invite</Button>
+                                                        :
+                                                        <Button variant="outlined"
+                                                                className={'header__searchBox__friend__btn'}
+                                                                onClick={()=>{
+                                                                    dispatch(disinviteFriend({idUser: user._id, idRequest: f._id}))
+                                                                }}
+                                                        >Disinvite</Button>
+                                                }
+
+                                </div>
                                         ))
                                         :
                                         <div className={'header__searchBox__noresult'}>
@@ -165,9 +201,9 @@ export const Header = () => {
             <div className={'header__account'}>
                 <div className={'header__account__user'}>
                     <Avatar className={'header__account__user__avatar'} alt={''}
-                            src={getImage(user.imgUserName)}
+                            src={getImage(user ? user.imgUserName : '')}
                     />
-                    <strong>{user.firstName} {user.name}</strong>
+                    <strong>{user ? user.firstName : ''} {user? user.name : ''}</strong>
                 </div>
                 <IconButton className={'header__account__btn header__account__btnChat'}>
                     <ChatIcon className={'header__account__btn__icon'} fontSize={'small'} color="action"/>
