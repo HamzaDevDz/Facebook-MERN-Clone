@@ -21,36 +21,37 @@ const connexion = async () => {
                     pusher.trigger('posts', 'inserted', {
                         change: change
                     })
-                }
-                if(change.operationType === 'update'){
-                    pusher.trigger('posts', 'updated', {
-                        change: change
-                    })
-                }
-                else{
-                    console.log('Posts : Error triggering Pusher')
+                }else{
+                    if(change.operationType === 'update'){
+                        pusher.trigger('posts', 'updated', {
+                            change: change
+                        })
+                    }
+                    else{
+                        console.log('Posts : Error triggering Pusher')
+                    }
                 }
             })
             const changeStreamUsers = mongoose.connection.collection('users').watch()
-            changeStreamPosts.on('change', change => {
+            changeStreamUsers.on('change', change => {
                 if(change.operationType === 'insert'){
-                    console.log('users updated Server')
+                    console.log('users inserted Server')
                     pusher.trigger('users', 'inserted', {
                         change: change
                     })
                 }
                 else{
-                    console.log('Users : Error triggering Pusher')
+                    if(change.operationType === 'update'){
+                        console.log('users updated Server')
+                        pusher.trigger('users', 'updated', {
+                            change: change
+                        })
+                    }
+                    else{
+                        console.log('Users : Error triggering Pusher')
+                    }
                 }
-                if(change.operationType === 'update'){
-                    console.log('users updated Server')
-                    pusher.trigger('users', 'updated', {
-                        change: change
-                    })
-                }
-                else{
-                    console.log('Users : Error triggering Pusher')
-                }
+
             })
         })
         const connectionParams = {

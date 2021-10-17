@@ -12,10 +12,18 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 import IconButton from "@material-ui/core/IconButton";
 import {useDispatch, useSelector} from "react-redux";
-import {logOut, selectUser} from "../../login/loginSlice";
+import {logOut, selectUser, synchUser} from "../../login/loginSlice";
 import {getImage} from "../../../ServerInstance";
 import {useHistory} from "react-router-dom"
-import {disinviteFriend, inviteFriend, searchFriends, selectFriends, selectStatusSearch} from "./headerSlice";
+import {
+    cleanRequesters,
+    disinviteFriend,
+    getUser,
+    inviteFriend,
+    searchFriends,
+    selectFriends, selectRequesters,
+    selectStatusSearch
+} from "./headerSlice";
 import CircularProgress from '@mui/material/CircularProgress';
 import PersonAddDisabledOutlinedIcon from '@mui/icons-material/PersonAddDisabledOutlined';
 import Button from "@mui/material/Button";
@@ -36,10 +44,13 @@ export const Header = () => {
     const [picProfile, setPicProfile] = useState('')
     const [search, setSearch] = useState('')
     const [focus, setFocus] = useState(false)
+    const [openNotification, setOpenNotification] = useState(false)
 
     const friends = useSelector(selectFriends)
     const statusSearch = useSelector(selectStatusSearch)
+    const requesters = useSelector(selectRequesters)
 
+    // SEARCH -----------------------------------------------------------------------------------
     useEffect(()=>{
         const home = document.querySelector('.home')
         if(home !== null) {
@@ -58,22 +69,33 @@ export const Header = () => {
         }
     }, [search])
 
+    // PLUS -----------------------------------------------------------------------------------
     const handleOpenPlus = (e) => {
         if(!openPlus){
             setOpenPlus(true)
-            document.querySelector('.header__account__btnPlus__iconPlus').style.color = 'blue'
-            document.addEventListener('click', ()=>{
-
-            })
+            document.querySelector('.header__account__btnPlus__icon').style.color = 'blue'
         }
         else{
             setOpenPlus(false)
-            document.querySelector('.header__account__btnPlus__iconPlus').style.color = '#6E6F70'
+            document.querySelector('.header__account__btnPlus__icon').style.color = '#6E6F70'
         }
     }
 
+    // NOTIFICATION -----------------------------------------------------------------------------------
+    const handleOpenNotification = () => {
+        if(!openNotification){
+            setOpenNotification(true)
+            document.querySelector('.header__account__btnNotification__icon').style.color = 'blue'
+        }else{
+            setOpenNotification(false)
+            document.querySelector('.header__account__btnNotification__icon').style.color = '#6E6F70'
+        }
+    }
+
+    // CLICK EVENT -----------------------------------------------------------------------------------
     document.onclick = (e) => {
         // console.log(e.target)
+        // SEARCH
         const inputSeach = document.querySelector('.header__search__barSearch__input')
         if(inputSeach === document.activeElement){
             setFocus(true)
@@ -88,42 +110,81 @@ export const Header = () => {
                 setFocus(false)
             }
         }
+        // PLUS
         if(openPlus){
             const btnPlus = document.querySelector('.header__account__btnPlus')
             if(btnPlus !== null){
                 if(!btnPlus.contains(e.target)){
-                    let headerPlus = document.querySelector('.header__plus')
+                    const headerPlus = document.querySelector('.header__plus')
                     if (!headerPlus.contains(e.target)) {
                         setOpenPlus(false)
-                        document.querySelector('.header__account__btnPlus__iconPlus').style.color = '#6E6F70'
+                        document.querySelector('.header__account__btnPlus__icon').style.color = '#6E6F70'
                     }
                 }
             }
-
+        }
+        if(openNotification){
+            const btnNotification = document.querySelector('.header__account__btnNotification')
+            if(btnNotification !== null){
+                if(!btnNotification.contains(e.target)){
+                    const headerNotification = document.querySelector('.header__notification')
+                    if(!headerNotification.contains(e.target)){
+                        setOpenNotification(false)
+                        document.querySelector('.header__account__btnNotification__icon').style.color = '#6E6F70'
+                    }
+                }
+            }
         }
     }
 
+    // LOG OUT -----------------------------------------------------------------------------------
     const handleLogOut = () => {
         dispatch(logOut())
         history.push('/login')
     }
 
+    // LOCATION and PUSHER -----------------------------------------------------------------------------------
     useEffect(()=>{
         if(user === null || user.length === 0){
             history.push('/login')
         }
+        // if(user.idRequests !== 0){
+        //     user.idRequests.forEach(idUser => {
+        //         dispatch(getUser(idUser))
+        //     })
+        // }
         const channel = pusher.subscribe('users');
         channel.bind('inserted', function(data) {
             console.log('inserted user Client')
-            dispatch(searchFriends({search: search, idUser: user._id}))
+            if(user !== null){
+                dispatch(searchFriends({search: search, idUser: user._id}))
+            }
         })
         channel.bind('updated', function(data) {
             console.log('updated user Client')
-            dispatch(searchFriends({search: search, idUser: user._id}))
+            if(user !== null){
+                const dislike = {search: search, idUser: user._id}
+                dispatch(synchUser({idUser: user._id}))
+                dispatch(searchFriends(dislike))
+            }
+
         })
     }, [])
 
+    useEffect(() => {
+        console.log('user has modified')
+        if(user !== null){
+            dispatch(cleanRequesters())
+            if(user.idRequests.length !== 0){
+                user.idRequests.forEach(idUser => {
+                    dispatch(getUser(idUser))
+                })
+            }
+        }
 
+    },[user])
+
+    // RENDER -------------------------------------------------------------------------------------------------------
     return (
         <div className={'header'}>
             <div className={'header__search'}>
@@ -145,7 +206,7 @@ export const Header = () => {
                                 !statusSearch ?
                                     friends.length !== 0 ?
                                         friends.map(f => (
-                                            <div className={'header__searchBox__friend'} key={f._id}>
+                                            <div key={f._id} className={'header__searchBox__friend'} >
                                                 <div className={'header__searchBox__friend__information'}>
                                                     <Avatar src={getImage(f.imgUserName)} alt={f.username.toUpperCase()}
                                                             className={'header__searchBox__friend__information__avatar'}
@@ -153,10 +214,11 @@ export const Header = () => {
                                                     {f.firstName} {f.name}
                                                 </div>
                                                 {
-                                                    !f.idRequests.includes(user._id) ?
+                                                    !f.idRequests.includes(String(user._id)) ?
                                                         <Button variant="contained"
                                                                 className={'header__searchBox__friend__btn'}
                                                                 onClick={() => {
+                                                                    console.log('invite friend')
                                                                     dispatch(inviteFriend({idUser: user._id, idRequest: f._id}))
                                                                 }}
                                                         >Invite</Button>
@@ -164,12 +226,12 @@ export const Header = () => {
                                                         <Button variant="outlined"
                                                                 className={'header__searchBox__friend__btn'}
                                                                 onClick={()=>{
+                                                                    console.log('disinvite friend')
                                                                     dispatch(disinviteFriend({idUser: user._id, idRequest: f._id}))
                                                                 }}
                                                         >Disinvite</Button>
                                                 }
-
-                                </div>
+                                            </div>
                                         ))
                                         :
                                         <div className={'header__searchBox__noresult'}>
@@ -208,12 +270,13 @@ export const Header = () => {
                 <IconButton className={'header__account__btn header__account__btnChat'}>
                     <ChatIcon className={'header__account__btn__icon'} fontSize={'small'} color="action"/>
                 </IconButton >
-                <IconButton className={'header__account__btn header__account__btnNotification'}>
-                    <NotificationsIcon className={'header__account__btn__icon'} fontSize={'small'} color="action"/>
+                <IconButton className={'header__account__btn header__account__btnNotification'}
+                            onClick={handleOpenNotification}>
+                    <NotificationsIcon className={'header__account__btn__icon header__account__btnNotification__icon'} fontSize={'small'} color="action"/>
                 </IconButton>
                 <IconButton className={'header__account__btn header__account__btnPlus'}
                             onClick={handleOpenPlus}>
-                    <KeyboardArrowDownIcon className={'header__account__btn__icon header__account__btnPlus__iconPlus'} fontSize={'small'} color="action"/>
+                    <KeyboardArrowDownIcon className={'header__account__btn__icon header__account__btnPlus__icon'} fontSize={'small'} color="action"/>
                 </IconButton>
             </div>
             {
@@ -239,7 +302,42 @@ export const Header = () => {
                     :
                     ''
             }
+            {
+                openNotification ?
+                    <div className={'header__notification'}>
+                        {
+                            requesters.length !== 0 ?
+                                requesters.map(requester => (
+                                    <div key={'request-'+requester._id} className={'header__notification__requester'}>
+                                        <div className={'header__notification__requester__information'}>
+                                            <Avatar
+                                                className={'header__notification__requester__information__avatar'}
+                                                src={getImage(requester.imgUserName)} alt={requester.username[0].toUpperCase()} />
+                                            {requester.firstName} {requester.name}
+                                        </div>
+                                        <div className={'header__notification__requester__btn'}>
+                                            <Button
+                                                className={'header__notification__requester__btnAccept'}
+                                                size="small"
+                                                variant="text">Accept</Button>
+                                            <Button
+                                                className={'header__notification__requester__btnRefuse'}
+                                                size="small"
+                                                color="secondary"
+                                                variant="text">Refuse</Button>
+                                        </div>
 
+                                    </div>
+                                ))
+                                :
+                                <div className={'header__notification__noresult'}>
+                                    No one invited you !
+                                </div>
+                        }
+                    </div>
+                    :
+                    ''
+            }
         </div>
     )
 }

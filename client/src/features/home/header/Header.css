@@ -177,7 +177,45 @@
     font-size: 0.8rem;
 }
 
-/* TREATMENT */
-.open{
-    /*display: flex;*/
+/* NOTIFICATION */
+.header__notification{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #FFFFFF;
+    position: absolute;
+    top: 110%;
+    right: 20px;
+    width: 400px;
+    padding: 8px;
+}
+.header__notification__noresult{
+    font-weight: bold;
+    font-size: 1rem;
+}
+.header__notification__requester{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #F0F2F5;
+}
+.header__notification__requester__information{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: bold;
+}
+.header__notification__requester__information__avatar{
+    margin-right: 10px !important;
+}
+.header__notification__requester__btnAccept{
+    margin-right: 5px !important;
+}
+.header__notification__requester__btn{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
 }

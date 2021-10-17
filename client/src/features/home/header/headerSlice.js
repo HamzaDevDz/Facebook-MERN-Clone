@@ -6,6 +6,9 @@ const initialState = {
     search:{
         friends: [],
         statusSearch: false
+    },
+    notification:{
+        requesters: []
     }
 }
 
@@ -48,10 +51,28 @@ export const disinviteFriend = createAsyncThunk(
         }
     })
 
+export const getUser = createAsyncThunk(
+    'user/get',
+    async (idUser, thunkAPI) => {
+        try {
+            const response = await axios.get(ServerInstanceAddress+"/user/get/?idUser="+idUser).then(res => {
+                return res.data
+            })
+            return response
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
+
+
 export const headerSlice = createSlice({
     name: 'header',
     initialState,
-    reducers: {},
+    reducers: {
+        cleanRequesters : (state, action) => {
+            state.notification.requesters = []
+        }
+    },
     extraReducers: {
         // UPLOAD USER
         [searchFriends.pending]: (state, action) => {
@@ -59,6 +80,7 @@ export const headerSlice = createSlice({
             state.search.friends = []
         },
         [searchFriends.fulfilled]: (state, action) => {
+            // state.search.friends = []
             state.search.statusSearch = false
             state.search.friends = action.payload
         },
@@ -70,12 +92,18 @@ export const headerSlice = createSlice({
         [disinviteFriend.fulfilled]: (state, action) => {
 
         },
+        // GET USER
+        [getUser.fulfilled]: (state, action) => {
+            state.notification.requesters.push(action.payload)
+        },
+
     }
 })
 
-// export const {} = loginSlice.actions
+export const {cleanRequesters} = headerSlice.actions
 
 export const selectFriends = (state) => state.header.search.friends
 export const selectStatusSearch = (state) => state.header.search.statusSearch
+export const selectRequesters = (state) => state.header.notification.requesters
 
 export default headerSlice.reducer

@@ -63,10 +63,10 @@ router.post('/search', (req, res)=>{
 router.post('/invite', (req, res)=>{
     // console.log(req)
     mongoUsers.findOneAndUpdate(
-        {_id: req.body.idRequest},
+        {_id: ObjectId(req.body.idRequest)},
         {
             $push:{
-                idRequests: req.body.idUser
+                idRequests: ObjectId(req.body.idUser)
             }
         }
     ).then(data => {
@@ -79,13 +79,37 @@ router.post('/invite', (req, res)=>{
 
 router.post('/disinvite', (req, res)=>{
     // console.log(req)
+    // console.log(req.body)
     mongoUsers.findOneAndUpdate(
-        {_id: req.body.idRequest},
+        {_id: ObjectId(req.body.idRequest)},
         {
             $pull:{
-                idRequests: req.body.idUser
+                idRequests: ObjectId(req.body.idUser)
             }
         }
+    ).then(data => {
+        // console.log(data)
+        res.send(data).status(200)
+    }).catch(err => {
+        res.status(500).send(err)
+    })
+})
+
+router.post('/synchronisation', (req, res)=>{
+    mongoUsers.findOneAndUpdate(
+        {_id: ObjectId(req.body.idUser)},
+    ).then(data => {
+        // console.log(data)
+        res.send(data).status(200)
+    }).catch(err => {
+        res.status(500).send(err)
+    })
+})
+
+router.get('/get', (req, res)=>{
+    // console.log(req.query)
+    mongoUsers.findOne(
+        {_id: ObjectId(req.query.idUser)},
     ).then(data => {
         // console.log(data)
         res.send(data).status(200)

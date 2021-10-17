@@ -35,6 +35,21 @@ export const retrieveUser = createAsyncThunk(
         }
     })
 
+export const synchUser = createAsyncThunk(
+    'user/synchronisation',
+    async (idUser, thunkAPI) => {
+        try {
+            const response = await axios.post(ServerInstanceAddress+"/user/synchronisation", idUser).then(res => {
+                return res.data
+            })
+            return response
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
+
+
+
 
 export const loginSlice = createSlice({
     name: 'login',
@@ -78,7 +93,12 @@ export const loginSlice = createSlice({
         },
         [retrieveUser.pending]: (state) => {
             state.statusLogin = 'wait'
-        }
+        },
+        // SYNCHRONISATION
+        [synchUser.fulfilled]: (state, action) => {
+            localStorage.setItem('user', JSON.stringify(action.payload))
+            state.user = action.payload
+        },
 
     }
 })
