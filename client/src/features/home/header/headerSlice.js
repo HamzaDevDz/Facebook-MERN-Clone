@@ -9,7 +9,7 @@ const initialState = {
     },
     notification:{
         requesters: []
-    }
+    },
 }
 
 export const searchFriends = createAsyncThunk(
@@ -64,6 +64,38 @@ export const getUser = createAsyncThunk(
         }
     })
 
+export const getRequesters = createAsyncThunk(
+    'user/requesters',
+    async (myIdUser, thunkAPI) => {
+        try {
+            const response = await axios.post(ServerInstanceAddress+"/user/requesters", myIdUser).then(res => {
+                return res.data
+            })
+            return response
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
+
+export const refuseFriend = createAsyncThunk(
+    'user/addFriend',
+    async (idUserRequest, thunkAPI) => {
+        try {
+            await axios.post(ServerInstanceAddress+"/user/addFriend", idUserRequest)
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
+
+export const removeFriend = createAsyncThunk(
+    'user/addFriend',
+    async (idUserFriend, thunkAPI) => {
+        try {
+            await axios.post(ServerInstanceAddress+"/user/removeFriend", idUserFriend)
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
 
 export const headerSlice = createSlice({
     name: 'header',
@@ -96,6 +128,10 @@ export const headerSlice = createSlice({
         [getUser.fulfilled]: (state, action) => {
             state.notification.requesters.push(action.payload)
         },
+        [getRequesters.fulfilled]: (state, action)=>{
+            state.notification.requesters = []
+            state.notification.requesters = action.payload
+        }
 
     }
 })

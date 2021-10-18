@@ -4,7 +4,15 @@ import './Login.css'
 import TextField from "@material-ui/core/TextField"
 import {useHistory} from "react-router-dom"
 import {useDispatch, useSelector} from "react-redux";
-import {resetError, retrieveLocalUser, retrieveUser, selectErr, selectStatusLogin, selectUser} from "./loginSlice";
+import {
+    resetError,
+    retrieveLocalUser,
+    retrieveUser,
+    selectErr,
+    selectStatusLogin,
+    selectUser,
+    synchUser
+} from "./loginSlice";
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from "@material-ui/lab/AlertTitle";
 import FormControl from "@material-ui/core/FormControl";
@@ -30,6 +38,7 @@ export const Login = () => {
 
     useEffect(()=>{
         if(user !== null){
+            dispatch(synchUser(user._id))
             history.push("/home")
         }
         else{

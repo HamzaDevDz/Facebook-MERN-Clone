@@ -22,12 +22,13 @@ import {
     inviteFriend,
     searchFriends,
     selectFriends, selectRequesters,
-    selectStatusSearch
+    selectStatusSearch, getRequesters, refuseFriend
 } from "./headerSlice";
 import CircularProgress from '@mui/material/CircularProgress';
 import PersonAddDisabledOutlinedIcon from '@mui/icons-material/PersonAddDisabledOutlined';
 import Button from "@mui/material/Button";
 import Pusher from 'pusher-js'
+import {addFriend, getFriends} from "../friendsBox/friendsBoxSlice";
 
 const pusher = new Pusher('67843c3bf2c33b4e1d28', {
     cluster: 'eu'
@@ -148,11 +149,9 @@ export const Header = () => {
         if(user === null || user.length === 0){
             history.push('/login')
         }
-        // if(user.idRequests !== 0){
-        //     user.idRequests.forEach(idUser => {
-        //         dispatch(getUser(idUser))
-        //     })
-        // }
+        if(user !== null){
+            dispatch(getRequesters({myIdUser: user._id}))
+        }
         const channel = pusher.subscribe('users');
         channel.bind('inserted', function(data) {
             console.log('inserted user Client')
@@ -166,23 +165,12 @@ export const Header = () => {
                 const dislike = {search: search, idUser: user._id}
                 dispatch(synchUser({idUser: user._id}))
                 dispatch(searchFriends(dislike))
+                dispatch(getRequesters({myIdUser: user._id}))
+                dispatch(getFriends({myIdUser: user._id}))
             }
 
         })
     }, [])
-
-    useEffect(() => {
-        console.log('user has modified')
-        if(user !== null){
-            dispatch(cleanRequesters())
-            if(user.idRequests.length !== 0){
-                user.idRequests.forEach(idUser => {
-                    dispatch(getUser(idUser))
-                })
-            }
-        }
-
-    },[user])
 
     // RENDER -------------------------------------------------------------------------------------------------------
     return (
@@ -317,10 +305,16 @@ export const Header = () => {
                                         </div>
                                         <div className={'header__notification__requester__btn'}>
                                             <Button
+                                                onClick={()=>{
+                                                    dispatch(addFriend({idUser: user._id, idRequest: requester._id}))
+                                                }}
                                                 className={'header__notification__requester__btnAccept'}
                                                 size="small"
                                                 variant="text">Accept</Button>
                                             <Button
+                                                onClick={()=>{
+                                                    dispatch(refuseFriend({idUser: user._id, idRequest: requester._id}))
+                                                }}
                                                 className={'header__notification__requester__btnRefuse'}
                                                 size="small"
                                                 color="secondary"
