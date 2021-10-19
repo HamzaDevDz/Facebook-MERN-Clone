@@ -16,6 +16,16 @@ export const addFriend = createAsyncThunk(
         }
     })
 
+export const removeFriend = createAsyncThunk(
+    'user/removeFriend',
+    async (idUserFriend, thunkAPI) => {
+        try {
+            await axios.post(ServerInstanceAddress+"/user/removeFriend", idUserFriend)
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
+
 export const getFriends = createAsyncThunk(
     'user/getFriends',
     async (idUser, thunkAPI) => {

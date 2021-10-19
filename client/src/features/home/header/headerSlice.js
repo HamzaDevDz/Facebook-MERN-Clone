@@ -65,7 +65,7 @@ export const getUser = createAsyncThunk(
     })
 
 export const getRequesters = createAsyncThunk(
-    'user/requesters',
+    'user/getRequesters',
     async (myIdUser, thunkAPI) => {
         try {
             const response = await axios.post(ServerInstanceAddress+"/user/requesters", myIdUser).then(res => {
@@ -78,24 +78,15 @@ export const getRequesters = createAsyncThunk(
     })
 
 export const refuseFriend = createAsyncThunk(
-    'user/addFriend',
+    'user/refuseFriend',
     async (idUserRequest, thunkAPI) => {
         try {
-            await axios.post(ServerInstanceAddress+"/user/addFriend", idUserRequest)
+            await axios.post(ServerInstanceAddress+"/user/refuseFriend", idUserRequest)
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
         }
     })
 
-export const removeFriend = createAsyncThunk(
-    'user/addFriend',
-    async (idUserFriend, thunkAPI) => {
-        try {
-            await axios.post(ServerInstanceAddress+"/user/removeFriend", idUserFriend)
-        } catch (error) {
-            return thunkAPI.rejectWithValue({ error: error.message });
-        }
-    })
 
 export const headerSlice = createSlice({
     name: 'header',

@@ -96,12 +96,14 @@ router.post('/disinvite', (req, res)=>{
 })
 
 router.post('/synchronisation', (req, res)=>{
+    console.log(req.body.idUser)
     mongoUsers.findOneAndUpdate(
         {_id: ObjectId(req.body.idUser)},
     ).then(data => {
         // console.log(data)
         res.send(data).status(200)
     }).catch(err => {
+        console.log(err)
         res.status(500).send(err)
     })
 })
@@ -165,9 +167,7 @@ router.post('/addFriend', (req, res)=>{
             $push:{
                 idFriends: req.body.idUser
             },
-            $pull:{
-                idRequests: req.body.idUser
-            }
+
         }
     ).then(data => {
         // console.log(data)
@@ -195,7 +195,7 @@ router.post('/removeFriend', (req, res)=>{
         {_id: ObjectId(req.body.idUser)},
         {
             $pull:{
-                idRequests: req.body.idFriend
+                idFriends: req.body.idFriend
             }
         }
     ).catch(err => {
@@ -205,7 +205,7 @@ router.post('/removeFriend', (req, res)=>{
         {_id: ObjectId(req.body.idFriend)},
         {
             $pull:{
-                idRequests: req.body.idFriend
+                idFriends: req.body.idUser
             }
         }
     ).catch(err => {

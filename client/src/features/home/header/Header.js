@@ -28,7 +28,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import PersonAddDisabledOutlinedIcon from '@mui/icons-material/PersonAddDisabledOutlined';
 import Button from "@mui/material/Button";
 import Pusher from 'pusher-js'
-import {addFriend, getFriends} from "../friendsBox/friendsBoxSlice";
+import {addFriend, getFriends, removeFriend} from "../friendsBox/friendsBoxSlice";
 
 const pusher = new Pusher('67843c3bf2c33b4e1d28', {
     cluster: 'eu'
@@ -202,22 +202,53 @@ export const Header = () => {
                                                     {f.firstName} {f.name}
                                                 </div>
                                                 {
-                                                    !f.idRequests.includes(String(user._id)) ?
-                                                        <Button variant="contained"
+                                                    user.idFriends.includes(String(f._id)) ?
+                                                        <Button variant="text"
                                                                 className={'header__searchBox__friend__btn'}
-                                                                onClick={() => {
-                                                                    console.log('invite friend')
-                                                                    dispatch(inviteFriend({idUser: user._id, idRequest: f._id}))
-                                                                }}
-                                                        >Invite</Button>
-                                                        :
-                                                        <Button variant="outlined"
-                                                                className={'header__searchBox__friend__btn'}
+                                                                size={'small'}
                                                                 onClick={()=>{
-                                                                    console.log('disinvite friend')
-                                                                    dispatch(disinviteFriend({idUser: user._id, idRequest: f._id}))
+                                                                    // console.log('disinvite friend')
+                                                                    dispatch(removeFriend({idUser: user._id, idFriend: f._id}))
                                                                 }}
-                                                        >Disinvite</Button>
+                                                        >Remove as friend</Button>
+                                                        :
+                                                        user.idRequests.includes(String(f._id)) ?
+                                                            <div className={'header__notification__requester__btn'}>
+                                                                <Button
+                                                                    onClick={()=>{
+                                                                        dispatch(addFriend({idUser: user._id, idRequest: f._id}))
+                                                                    }}
+                                                                    className={'header__notification__requester__btnAccept'}
+                                                                    size="small"
+                                                                    variant="text">Accept</Button>
+                                                                <Button
+                                                                    onClick={()=>{
+                                                                        dispatch(refuseFriend({idUser: user._id, idRequest: f._id}))
+                                                                    }}
+                                                                    className={'header__notification__requester__btnRefuse'}
+                                                                    size="small"
+                                                                    color="secondary"
+                                                                    variant="text">Refuse</Button>
+                                                            </div>
+                                                            :
+                                                            !f.idRequests.includes(String(user._id)) ?
+                                                                <Button variant="contained"
+                                                                        size={'small'}
+                                                                        className={'header__searchBox__friend__btn'}
+                                                                        onClick={() => {
+                                                                            // console.log('invite friend')
+                                                                            dispatch(inviteFriend({idUser: user._id, idRequest: f._id}))
+                                                                        }}
+                                                                >Invite</Button>
+                                                                :
+                                                                <Button variant="outlined"
+                                                                        className={'header__searchBox__friend__btn'}
+                                                                        size={'small'}
+                                                                        onClick={()=>{
+                                                                            // console.log('disinvite friend')
+                                                                            dispatch(disinviteFriend({idUser: user._id, idRequest: f._id}))
+                                                                        }}
+                                                                >Disinvite</Button>
                                                 }
                                             </div>
                                         ))

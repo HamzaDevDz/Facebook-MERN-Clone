@@ -10,3 +10,14 @@
     height: 600px;
     z-index: 1;
 }
+.friendsBox__friend{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
+    font-weight: bold;
+}
+.friendsBox__friend__avatar{
+    margin-right: 20px !important;
+}
