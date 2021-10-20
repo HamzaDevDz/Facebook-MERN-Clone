@@ -162,9 +162,8 @@ export const Header = () => {
         channel.bind('updated', function(data) {
             console.log('updated user Client')
             if(user !== null){
-                const dislike = {search: search, idUser: user._id}
                 dispatch(synchUser({idUser: user._id}))
-                dispatch(searchFriends(dislike))
+                dispatch(searchFriends({search: search, idUser: user._id}))
                 dispatch(getRequesters({myIdUser: user._id}))
                 dispatch(getFriends({myIdUser: user._id}))
             }

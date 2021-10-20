@@ -38,7 +38,7 @@ export const Login = () => {
 
     useEffect(()=>{
         if(user !== null){
-            // dispatch(synchUser({idUser: user._id}))
+            dispatch(synchUser({idUser: user._id}))
             history.push("/home")
         }
         else{

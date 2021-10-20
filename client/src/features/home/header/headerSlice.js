@@ -91,11 +91,7 @@ export const refuseFriend = createAsyncThunk(
 export const headerSlice = createSlice({
     name: 'header',
     initialState,
-    reducers: {
-        cleanRequesters : (state, action) => {
-            state.notification.requesters = []
-        }
-    },
+    reducers: {},
     extraReducers: {
         // UPLOAD USER
         [searchFriends.pending]: (state, action) => {
@@ -127,7 +123,7 @@ export const headerSlice = createSlice({
     }
 })
 
-export const {cleanRequesters} = headerSlice.actions
+// export const {} = headerSlice.actions
 
 export const selectFriends = (state) => state.header.search.friends
 export const selectStatusSearch = (state) => state.header.search.statusSearch

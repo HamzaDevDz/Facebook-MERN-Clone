@@ -6,6 +6,7 @@ import connexion from "./db.js"
 import post from "./routes/post.js"
 import user from "./routes/user.js"
 import upload from "./routes/upload.js"
+import messages from "./routes/messages.js";
 
 // app config --------------------------------------------------------------------------------------------
 const app = express()
@@ -25,6 +26,7 @@ app.get('/', (req, res)=>res.status(200).send('Hello world'))
 app.use("/post", post)
 app.use("/user", user)
 app.use("/media", upload)
+app.use('/messages', messages)
 
 // listner --------------------------------------------------------------------------------------------
 app.listen(port, ()=>console.log('listening on localhost : ' + port))

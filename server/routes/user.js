@@ -96,14 +96,14 @@ router.post('/disinvite', (req, res)=>{
 })
 
 router.post('/synchronisation', (req, res)=>{
-    console.log(req.body.idUser)
-    mongoUsers.findOneAndUpdate(
+    // console.log(req.body.idUser)
+    mongoUsers.findOne(
         {_id: ObjectId(req.body.idUser)},
     ).then(data => {
         // console.log(data)
         res.send(data).status(200)
     }).catch(err => {
-        console.log(err)
+        // console.log(err)
         res.status(500).send(err)
     })
 })

@@ -1,23 +1,48 @@
 .friendsBox{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    background-color: #FFFFFF;
+    background-color: #F0F2F5;
     position: fixed;
-    right: 20px;
-    top: 60px;
-    width: 300px;
-    height: 600px;
+    top: 70px;
+    right: 10px;
     z-index: 1;
+    padding-bottom: 5px;
+}
+.friendsBox__title{
+    align-self: flex-start;
+    font-size: 1.2rem;
+    /*font-weight: bolder;*/
+    color: #65676B;
 }
 .friendsBox__friend{
     display: flex;
     flex-direction: row;
     align-items: center;
+    padding: 10px;
+    /*font-weight: bold;*/
+    position: relative;
+    /*margin-bottom: 10px;*/
+}
+.friendsBox__friend:hover{
+    cursor: pointer;
+    /*background-color: lightgrey;*/
+}
+.friendsBox__friend::before{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    padding: 5px;
-    font-weight: bold;
+    height: 1px;
+}
+.friendsBox__friend:hover::before{
+    background: linear-gradient(90deg, rgba(254,254,254,1) 0%, rgba(168,168,168,1) 50%, rgba(255,255,255,0.3900910706079307) 100%);
 }
 .friendsBox__friend__avatar{
-    margin-right: 20px !important;
+    margin-right: 10px !important;
+}
+.friendsBox__noFriends{
+    padding: 10px;
+    font-style: italic;
 }

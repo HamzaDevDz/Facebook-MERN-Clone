@@ -44,10 +44,6 @@ export const friendsBoxSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: {
-        // ADD FRIEND
-        [addFriend.fulfilled]: (state, action) => {
-            // state.friends = action.payload
-        },
         // GET FRIENDS
         [getFriends.fulfilled]: (state, action) => {
             state.friends = action.payload

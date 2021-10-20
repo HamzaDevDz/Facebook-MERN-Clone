@@ -22,6 +22,9 @@ export const FriendsBox = () => {
 
     return(
         <div className={'friendsBox'}>
+            <p className={'friendsBox__title'}>
+                Contacts
+            </p>
             {
                 friends.length !== 0 ?
                     friends.map(friend => (
@@ -33,7 +36,9 @@ export const FriendsBox = () => {
                         </div>
                     ))
                     :
-                    ''
+                    <div className={'friendsBox__noFriends'}>
+                        No friends yet
+                    </div>
             }
         </div>
     )

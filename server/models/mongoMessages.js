@@ -2,10 +2,12 @@ import mongoose from 'mongoose'
 
 const messageModel = mongoose.Schema({
     idUsers: [String],
-    message: String,
-    likes: Number,
-    timestamp: Number
+    messages: [{
+        message: String,
+        timestamp: Number,
+        idUser: String,
+        likes: [String]
+    }]
 })
 
-// 1st param : name of collection
 export default mongoose.model('messages', messageModel)
