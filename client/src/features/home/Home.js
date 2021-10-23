@@ -22,7 +22,6 @@ export const Home = () => {
         user
             ?
                 <div className={'home'}>
-                    {/*<Header />*/}
                     <Feed />
                     <Sidebar />
                 </div>

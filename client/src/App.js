@@ -5,6 +5,7 @@ import {SignUp} from "./features/login/SignUp/SignUp";
 import {Home} from "./features/home/Home";
 import {Header} from "./features/home/header/Header";
 import {FriendsBox} from "./features/home/friendsBox/FriendsBox";
+import {Messages} from "./features/home/messages/Messages";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
                                <Header />
                                <FriendsBox />
                                <Home />
+                               <Messages />
                            </React.Fragment>
                        )}
                 />
