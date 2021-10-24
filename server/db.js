@@ -51,7 +51,24 @@ const connexion = async () => {
                         console.log('Users : Error triggering Pusher')
                     }
                 }
-
+            })
+            const changeStreamMessages = mongoose.connection.collection('messages').watch()
+            changeStreamMessages.on('change', change => {
+                if (change.operationType === 'insert') {
+                    console.log('messages inserted Server')
+                    pusher.trigger('messages', 'inserted', {
+                        change: change
+                    })
+                } else {
+                    if (change.operationType === 'update') {
+                        console.log('messages updated Server')
+                        pusher.trigger('messages', 'updated', {
+                            change: change
+                        })
+                    } else {
+                        console.log('Messages : Error triggering Pusher')
+                    }
+                }
             })
         })
         const connectionParams = {

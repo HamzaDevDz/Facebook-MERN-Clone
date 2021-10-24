@@ -20,6 +20,34 @@ export const getDiscussion = createAsyncThunk(
         }
     })
 
+export const addMessage = createAsyncThunk(
+    'messages/addMessage',
+    async (newMessage, thunkAPI) => {
+        try {
+            const response = await axios.post(ServerInstanceAddress+"/messages/addMessage", newMessage).then(res => {
+                return res.data
+            })
+
+            return response
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
+export const synchMessages = createAsyncThunk(
+    'messages/synchMessages',
+    async (messages, thunkAPI) => {
+        try {
+            const response = await axios.post(ServerInstanceAddress+"/messages/synchMessages", messages).then(res => {
+                return res.data
+            })
+
+            return response
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
+
+
 export const messagesSlice = createSlice({
     name: 'messages',
     initialState,
@@ -34,6 +62,11 @@ export const messagesSlice = createSlice({
                 state.discussions.push(action.payload)
             }
         },
+        [synchMessages.fulfilled]: (state, action) => {
+            console.log(action.payload)
+            const index = state.discussions.findIndex(d => d.messages._id === action.payload._id)
+            state.discussions[index].messages = action.payload
+        }
     }
 })
 
