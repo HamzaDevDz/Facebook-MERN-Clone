@@ -28,7 +28,8 @@ router.post('/getDiscussion', (req, res)=>{
                     firstName: result.firstName,
                     imgUserName: result.imgUserName
                 },
-                messages: data
+                messages: data,
+
             }
             // console.log(clientResult)
             res.send(clientResult).status(200)
@@ -59,7 +60,19 @@ router.post('/synchMessages', (req, res) => {
         {idUsers: {$all: [req.body.idUser1, req.body.idUser2]}},
 
     ).then(data => {
-        console.log(data)
+        // console.log(data)
+        res.send(data).status(200)
+    }).catch(err => {
+        res.status(500).send(err)
+    })
+})
+
+router.post('/MySynchMessages', (req, res) => {
+    mongoMessages.findOne(
+        {idUsers: {$all: [req.body.idUser1, req.body.idUser2]}},
+
+    ).then(data => {
+        // console.log(data)
         res.send(data).status(200)
     }).catch(err => {
         res.status(500).send(err)

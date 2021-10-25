@@ -27,12 +27,8 @@ import {
 import CircularProgress from '@mui/material/CircularProgress';
 import PersonAddDisabledOutlinedIcon from '@mui/icons-material/PersonAddDisabledOutlined';
 import Button from "@mui/material/Button";
-import Pusher from 'pusher-js'
+import {pusher} from "../../../ServerInstance";
 import {addFriend, getFriends, removeFriend} from "../friendsBox/friendsBoxSlice";
-
-const pusher = new Pusher('67843c3bf2c33b4e1d28', {
-    cluster: 'eu'
-});
 
 export const Header = () => {
 

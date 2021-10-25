@@ -2,81 +2,11 @@
     position: fixed;
     bottom: 5px;
     right: 5px;
-    height: 400px;
+    /*height: 400px;*/
+    /*min-height: 60px;*/
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     align-items: center;
+    overflow-y: visible;
     z-index: 2;
-}
-.messages__discussion{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #FFFFFF;
-    height: 100%;
-    width: 400px;
-    margin: 5px;
-    position: relative;
-    padding: 10px;
-    overflow: hidden;
-}
-.messages__discussion__information{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    background-color: #F0F2F5;
-    box-shadow: 0 1px 8px -7px #000000, 0 1px 5px 3px #F0F2F5;
-}
-.messages__discussion__information__avatar{
-    margin: 10px !important;
-}
-.messages__discussion__information__exit{
-    position: absolute !important;
-    right: 0 !important;
-    /*padding: 0 !important;*/
-}
-.messages__discussion__main{
-    flex: 1;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 60px;
-    overflow-y: auto;
-}
-.messages__discussion__main__myMsg{
-    color: #FFFFFF;
-    background-color: #3F51B5;
-    padding: 5px;
-    align-self: flex-end;
-}
-.messages__discussion__main__friendMsg{
-    background-color: #F0F2F5;
-    padding: 5px;
-    align-self: flex-start;
-}
-.messages__discussion__form{
-    width: 100%;
-    background-color: #F0F2F5 !important;
-    margin: 5px 0;
-}
-.messages__discussion__form__control{
-    width: 100%;
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    background-color: #FFFFFF;
-    padding: 5px !important;
-}
-.messages__discussion__form__control__input{
-    flex: 1 !important;
-    background-color: #F0F2F5 !important;
-    border-radius: 25px;
-    padding: 10px !important;
-    border: none;
-    outline: none;
 }

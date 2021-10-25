@@ -3,7 +3,8 @@ import {ServerInstanceAddress} from "../../../ServerInstance";
 import axios from "axios";
 
 const initialState = {
-    discussions: []
+    discussions: [],
+    statusUpDateDiscussions: false
 }
 
 export const getDiscussion = createAsyncThunk(
@@ -53,26 +54,38 @@ export const messagesSlice = createSlice({
     initialState,
     reducers: {
         cleanDiscussion : (state, action) => {
-            state.discussions.splice(action.payload, 1)
+            if(state.discussions.length === 1){
+                state.discussions = []
+            }else{
+                state.discussions.splice(action.payload, 1)
+            }
+        },
+        resetStatusUpDateDiscussions : (state, action) => {
+           state.statusUpDateDiscussions = false
         }
     },
     extraReducers: {
         [getDiscussion.fulfilled]: (state, action) => {
             if(action.payload !== null){
-                state.discussions.push(action.payload)
+                const check = state.discussions.findIndex(d => d.messages._id === action.payload.messages._id)
+                if(check === -1){
+                    state.discussions.push(action.payload)
+                    state.statusUpDateDiscussions = true
+                }
             }
         },
         [synchMessages.fulfilled]: (state, action) => {
-            console.log(action.payload)
             const index = state.discussions.findIndex(d => d.messages._id === action.payload._id)
             state.discussions[index].messages = action.payload
+            state.statusUpDateDiscussions = true
         }
     }
 })
 
-export const {cleanDiscussion} = messagesSlice.actions
+export const {cleanDiscussion, resetStatusUpDateDiscussions} = messagesSlice.actions
 
 export const selectDiscussions = state => state.messages.discussions
+export const selectStatusUpDateDiscussions = state => state.messages.statusUpDateDiscussions
 
 
 export default messagesSlice.reducer

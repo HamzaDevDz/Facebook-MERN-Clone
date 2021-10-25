@@ -1,13 +1,9 @@
 import React, {useEffect} from "react"
 import './Posts.css'
 import {useDispatch, useSelector} from "react-redux";
-import {getPosts, selectPosts, selectStatusNewPost} from "./postsSlice";
+import {getPosts, selectPosts} from "./postsSlice";
 import {Post} from "./post/Post";
-import Pusher from 'pusher-js'
-
-const pusher = new Pusher('67843c3bf2c33b4e1d28', {
-    cluster: 'eu'
-});
+import {pusher} from "../../../../ServerInstance";
 
 export const Posts = () => {
 

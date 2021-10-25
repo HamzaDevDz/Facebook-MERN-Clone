@@ -29,9 +29,9 @@ export const FriendsBox = () => {
             {
                 friends.length !== 0 ?
                     friends.map(friend => (
-                        <div className={'friendsBox__friend'}
+                        <div key={'friend-'+friend._id} className={'friendsBox__friend'}
                              onClick={() => {
-                                 console.log('getDiscussion !')
+                                 // console.log('getDiscussion !')
                                  dispatch(getDiscussion(
                                      {
                                          idUser1: user._id,
