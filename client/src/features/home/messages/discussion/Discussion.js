@@ -46,7 +46,7 @@ export const Discussion = ({friend, messages, index}) => {
                 !reduced ?
                     <div className={'messages__discussion__main'}>
                         {
-                            messages !== null && messages.messages.length !== 0 ?
+                            messages !== null && messages.length !== 0 ?
                                 messages.messages.map(msg => (
                                     msg.idUser === user._id ?
                                         <div key={'msg-' + msg._id}

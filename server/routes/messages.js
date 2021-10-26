@@ -4,20 +4,32 @@ import mongoUsers from "../models/mongoUsers.js";
 import {ObjectId} from 'mongodb';
 const router = express.Router();
 
-router.post('/getDiscussion', (req, res)=>{
+router.post('/getDiscussion',  (req, res)=>{
+    console.log(req.body)
     mongoMessages.findOneAndUpdate(
-        {idUsers: {$all: [req.body.idUser1, req.body.idUser2]}},
+        {idUsers: {$all: [{$elemMatch:{$eq:req.body.idUser1}}, {$elemMatch: {$eq:req.body.idUser2}}]}},
             {
                 $setOnInsert: {
                     idUsers: [req.body.idUser1, req.body.idUser2],
+                    users:[
+                        {
+                            idUser: req.body.idUser1,
+                            saw: 0
+                        },
+                        {
+                            idUser: req.body.idUser2,
+                            saw: 0
+                        }
+                    ],
                     messages: []
                 }
             },
         {
-            returnNewDocument: false,
-            upsert: true
+            upsert: true,
+            returnDocument: 'after'
         }
     ).then(data => {
+        console.log(data)
         mongoUsers.findOne(
             {_id: req.body.idUser2}
         ).then(result => {
@@ -29,12 +41,12 @@ router.post('/getDiscussion', (req, res)=>{
                     imgUserName: result.imgUserName
                 },
                 messages: data,
-
             }
-            // console.log(clientResult)
+            console.log(clientResult)
             res.send(clientResult).status(200)
         })
     }).catch(err => {
+        console.log(err)
         res.status(500).send(err)
     })
 })

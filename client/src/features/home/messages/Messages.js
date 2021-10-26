@@ -24,15 +24,8 @@ export const Messages = () => {
     useEffect(()=>{
         const channel = pusher.subscribe('messages');
         channel.bind('inserted', function(data) {
-            if(discussions.length !== 0){
-                discussions.forEach((d,i) => {
-                    const idUsers = {
-                        idUser1 : user._id,
-                        idUser2 : d.friend.id
-                    }
-                    dispatch(synchMessages(idUsers))
-                })
-            }
+            console.log('Inserted messages')
+            setStatusSynchServer(true)
         })
         channel.bind('updated', function(data) {
             console.log('Update messages')
