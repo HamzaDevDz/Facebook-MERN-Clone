@@ -6,6 +6,8 @@ import {Sidebar} from "./sidebar/Sidebar.js";
 import {useSelector} from "react-redux";
 import {selectUser} from "../login/loginSlice";
 import {useHistory} from "react-router-dom"
+import {FriendsBox} from "./friendsBox/FriendsBox";
+import {Messages} from "./messages/Messages";
 
 export const Home = () => {
 

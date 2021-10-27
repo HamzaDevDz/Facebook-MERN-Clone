@@ -39,10 +39,19 @@
 .friendsBox__friend:hover::before{
     background: linear-gradient(90deg, rgba(254,254,254,1) 0%, rgba(168,168,168,1) 50%, rgba(255,255,255,0.3900910706079307) 100%);
 }
-.friendsBox__friend__avatar{
-    margin-right: 10px !important;
+.friendsBox__friend__text{
+    margin-left: 10px;
+    display: flex;
 }
 .friendsBox__noFriends{
     padding: 10px;
     font-style: italic;
+}
+
+/* MEDIA QUERIES */
+@media only screen and (max-width: 1200px) {
+    .friendsBox__friend__text {
+        display: none;
+        margin: 0;
+    }
 }

@@ -38,7 +38,6 @@ export const Header = () => {
     const history = useHistory()
 
     const [openPlus, setOpenPlus] = useState(false)
-    const [picProfile, setPicProfile] = useState('')
     const [search, setSearch] = useState('')
     const [focus, setFocus] = useState(false)
     const [openNotification, setOpenNotification] = useState(false)
@@ -50,11 +49,17 @@ export const Header = () => {
     // SEARCH -----------------------------------------------------------------------------------
     useEffect(()=>{
         const home = document.querySelector('.home')
+        const friends = document.querySelector('.friendsBox')
+        const messages = document.querySelector('.messages')
         if(home !== null) {
             if (focus) {
                 home.style.filter = 'brightness(80%)'
+                friends.style.filter = 'brightness(80%)'
+                messages.style.filter = 'brightness(80%)'
             } else {
                 home.style.filter = 'brightness(100%)'
+                friends.style.filter = 'brightness(100%)'
+                messages.style.filter = 'brightness(100%)'
             }
         }
 

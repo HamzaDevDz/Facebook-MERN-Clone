@@ -42,7 +42,7 @@ export const FriendsBox = () => {
                             <Avatar src={getImage(friend.imgUserName)} alt={friend.username[0].toUpperCase()}
                                     className={'friendsBox__friend__avatar'}
                             />
-                            {friend.name} {friend.firstName}
+                            <span className={'friendsBox__friend__text'}>{friend.name} {friend.firstName}</span>
                         </div>
                     ))
                     :

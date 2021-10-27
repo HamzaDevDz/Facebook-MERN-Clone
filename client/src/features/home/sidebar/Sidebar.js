@@ -24,35 +24,35 @@ export const Sidebar = () => {
         <div className={'sidebar'}>
             <div className={'sidebar__user'}>
                 <Avatar className={'sidebar__user__avatar'} alt="H" src={img} />
-                <strong>{user.firstName} {user.name}</strong>
+                <strong className={'sidebar__user__text'}>{user.firstName} {user.name}</strong>
             </div>
             <div className={'sidebar__point sidebar__covid'}>
                 <LocalHospitalIcon className={'sidebar__point__icon'} style={{color:'#3F51B5'}} />
-                <strong>COVID-19 Information Center</strong>
+                <strong className={'sidebar__user__text'}>COVID-19 Information Center</strong>
             </div>
             <div className={'sidebar__point sidebar__pages'}>
                 <EmojiFlagsIcon className={'sidebar__point__icon'} style={{color:'#3F51B5'}} />
-                <strong>Pages</strong>
+                <strong className={'sidebar__user__text'}>Pages</strong>
             </div>
             <div className={'sidebar__point sidebar__friends'}>
                 <PeopleAltIcon className={'sidebar__point__icon'} style={{color:'#3F51B5'}} />
-                <strong>Friends</strong>
+                <strong className={'sidebar__user__text'}>Friends</strong>
             </div>
             <div className={'sidebar__point sidebar__messengers'}>
                 <ChatIcon className={'sidebar__point__icon'} style={{color:'#3F51B5'}} />
-                <strong>Messengers</strong>
+                <strong className={'sidebar__user__text'}>Messengers</strong>
             </div>
             <div className={'sidebar__point sidebar__marketplace'}>
                 <StorefrontIcon className={'sidebar__point__icon'} style={{color:'#3F51B5'}} />
-                <strong>Marketplace</strong>
+                <strong className={'sidebar__user__text'}>Marketplace</strong>
             </div>
             <div className={'sidebar__point sidebar__videos'}>
                 <YouTubeIcon className={'sidebar__point__icon'} style={{color:'#3F51B5'}} />
-                <strong>Videos</strong>
+                <strong className={'sidebar__user__text'}>Videos</strong>
             </div>
             <div className={'sidebar__point sidebar__more'}>
                 <ExpandMoreIcon className={'sidebar__point__icon'} style={{color:'#3F51B5'}} />
-                <strong>More</strong>
+                <strong className={'sidebar__user__text'}>More</strong>
             </div>
         </div>
     )

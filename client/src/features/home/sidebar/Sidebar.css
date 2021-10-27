@@ -8,10 +8,11 @@
     padding: 0 10px 0 10px;
 }
 .sidebar__point, .sidebar__user{
-    padding: 10px;
+    padding: 10px 0 10px 0;
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: flex-start;
 }
 .sidebar__point:hover{
     cursor: pointer;
@@ -21,6 +22,18 @@
     justify-content: space-evenly;
     border-bottom: 1px solid lightgrey;
 }
-.sidebar__point__icon{
-    margin-right: 10px;
+.sidebar__user__text{
+    margin-left: 10px;
+    display: flex;
+}
+
+/* MEDIA QUERIES */
+@media only screen and (max-width: 1200px) {
+    .sidebar__point, .sidebar__user{
+        justify-content: space-evenly;
+    }
+    .sidebar__user__text {
+        display: none;
+        margin: 0;
+    }
 }

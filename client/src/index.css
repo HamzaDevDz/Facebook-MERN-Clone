@@ -2,12 +2,13 @@
     margin: 0;
     padding: 0;
     font-family: "Segoe UI", "sans-serif";
+    box-sizing: border-box;
 }
 body{
     background-color: #F0F2F5;
 }
 body::-webkit-scrollbar {
-    display: none;
+    /*display: none;*/
 }
 .app{
     width: 100vw;
@@ -15,4 +16,5 @@ body::-webkit-scrollbar {
     flex-direction: column;
     align-items: center;
     position: relative;
+    box-sizing: border-box;
 }

@@ -76,7 +76,7 @@ export const messagesSlice = createSlice({
         },
         [synchMessages.fulfilled]: (state, action) => {
             const index = state.discussions.findIndex(d => d.messages._id === action.payload._id)
-            if(index !== 1){
+            if(index !== -1){
                 state.discussions[index].messages = action.payload
             }
             state.statusUpDateDiscussions = true

@@ -4,32 +4,36 @@ import mongoUsers from "../models/mongoUsers.js";
 import {ObjectId} from 'mongodb';
 const router = express.Router();
 
-router.post('/getDiscussion',  (req, res)=>{
+router.post('/getDiscussion',  async (req, res)=>{
     console.log(req.body)
-    mongoMessages.findOneAndUpdate(
-        {idUsers: {$all: [{$elemMatch:{$eq:req.body.idUser1}}, {$elemMatch: {$eq:req.body.idUser2}}]}},
-            {
-                $setOnInsert: {
-                    idUsers: [req.body.idUser1, req.body.idUser2],
-                    users:[
-                        {
-                            idUser: req.body.idUser1,
-                            saw: 0
-                        },
-                        {
-                            idUser: req.body.idUser2,
-                            saw: 0
-                        }
-                    ],
-                    messages: []
-                }
-            },
+    await mongoMessages.findOneAndUpdate(
+        {},
         {
+            $setOnInsert: {
+                idUsers: [req.body.idUser1, req.body.idUser2],
+                users:[
+                    {
+                        idUser: req.body.idUser1,
+                        saw: 0
+                    },
+                    {
+                        idUser: req.body.idUser2,
+                        saw: 0
+                    }
+                ],
+                messages: []
+            }
+        },
+        {
+            new: true,
             upsert: true,
-            returnDocument: 'after'
+            rawResult: true,
+            arrayFilters:[
+                {'users.idUser': {$in: [req.body.idUser1, req.body.idUser2]}}
+            ]
         }
     ).then(data => {
-        console.log(data)
+        // console.log(data)
         mongoUsers.findOne(
             {_id: req.body.idUser2}
         ).then(result => {
@@ -40,9 +44,9 @@ router.post('/getDiscussion',  (req, res)=>{
                     firstName: result.firstName,
                     imgUserName: result.imgUserName
                 },
-                messages: data,
+                messages: data.value,
             }
-            console.log(clientResult)
+            // console.log(clientResult)
             res.send(clientResult).status(200)
         })
     }).catch(err => {
@@ -69,20 +73,13 @@ router.post('/addMessage', (req, res) => {
 
 router.post('/synchMessages', (req, res) => {
     mongoMessages.findOne(
-        {idUsers: {$all: [req.body.idUser1, req.body.idUser2]}},
-
-    ).then(data => {
-        // console.log(data)
-        res.send(data).status(200)
-    }).catch(err => {
-        res.status(500).send(err)
-    })
-})
-
-router.post('/MySynchMessages', (req, res) => {
-    mongoMessages.findOne(
-        {idUsers: {$all: [req.body.idUser1, req.body.idUser2]}},
-
+        {},
+        {},
+        {
+            arrayFilters:[
+                {'users.idUser': {$in: [req.body.idUser1, req.body.idUser2]}}
+            ]
+        }
     ).then(data => {
         // console.log(data)
         res.send(data).status(200)
