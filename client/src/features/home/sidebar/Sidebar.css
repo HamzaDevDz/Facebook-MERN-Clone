@@ -6,6 +6,7 @@
     left: 0;
     top: 70px;
     padding: 0 10px 0 10px;
+    width: auto;
 }
 .sidebar__point, .sidebar__user{
     padding: 10px 0 10px 0;
@@ -28,6 +29,30 @@
 }
 
 /* MEDIA QUERIES */
+@media only screen and (max-width: 600px) {
+    .sidebar{
+        width: 100%;
+        position: relative;
+        flex-direction: row;
+        z-index: 1;
+        top: auto;
+        left: auto;
+        justify-content: space-evenly;
+        margin-bottom: 10px;
+    }
+}
+@media only screen and (max-width: 800px) and (min-width: 600px) {
+    .sidebar{
+        position: relative;
+        flex-direction: row;
+        z-index: 1;
+        top: auto;
+        left: auto;
+        width: 600px;
+        justify-content: space-evenly;
+        margin-bottom: 10px;
+    }
+}
 @media only screen and (max-width: 1200px) {
     .sidebar__point, .sidebar__user{
         justify-content: space-evenly;

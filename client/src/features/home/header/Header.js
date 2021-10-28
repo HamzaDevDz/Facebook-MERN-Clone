@@ -199,7 +199,7 @@ export const Header = () => {
                                                     <Avatar src={getImage(f.imgUserName)} alt={f.username.toUpperCase()}
                                                             className={'header__searchBox__friend__information__avatar'}
                                                     />
-                                                    {f.firstName} {f.name}
+                                                    <span>{f.firstName} {f.name}</span>
                                                 </div>
                                                 {
                                                     user.idFriends.includes(String(f._id)) ?
@@ -284,7 +284,7 @@ export const Header = () => {
                     <Avatar className={'header__account__user__avatar'} alt={''}
                             src={getImage(user ? user.imgUserName : '')}
                     />
-                    <strong>{user ? user.firstName : ''} {user? user.name : ''}</strong>
+                    <strong className={"header__account__user__text"}>{user ? user.firstName : ''} {user? user.name : ''}</strong>
                 </div>
                 <IconButton className={'header__account__btn header__account__btnChat'}>
                     <ChatIcon className={'header__account__btn__icon'} fontSize={'small'} color="action"/>

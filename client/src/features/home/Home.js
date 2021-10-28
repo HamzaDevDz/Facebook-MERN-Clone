@@ -24,8 +24,8 @@ export const Home = () => {
         user
             ?
                 <div className={'home'}>
-                    <Feed />
                     <Sidebar />
+                    <Feed />
                 </div>
             :
                 ''

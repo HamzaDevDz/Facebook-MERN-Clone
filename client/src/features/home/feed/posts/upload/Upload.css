@@ -1,5 +1,5 @@
 .feed__upload{
-    width: 600px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -46,3 +46,4 @@
 .feed__upload__multi__label__icon{
     margin-right: 5px;
 }
+

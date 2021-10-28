@@ -2,7 +2,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    width: 600px;
     position: relative;
-    /*transform: translateY(70px);*/
+}
+
+/* MEDIA QUERIES */
+@media only screen and (max-width: 600px) {
+    .feed {
+        width: 100%;
+    }
 }

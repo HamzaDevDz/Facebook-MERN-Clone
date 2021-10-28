@@ -218,3 +218,22 @@
     align-items: center;
     flex-direction: row;
 }
+
+/* MEDIA QUERIES */
+@media only screen and (max-width: 800px) {
+    .header__search__barSearch{
+        width: 100px;
+    }
+    .header__nav{
+        flex: 1;
+    }
+    .header__account__user__text {
+        display: none;
+    }
+    .header__nav__btn{
+        padding: 10px 5px !important;
+    }
+    .header__account__btn{
+        padding: 5px !important;
+    }
+}
