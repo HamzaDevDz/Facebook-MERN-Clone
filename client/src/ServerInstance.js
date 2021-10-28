@@ -1,6 +1,6 @@
 import Pusher from "pusher-js";
 
-export const ServerInstanceAddress = 'http://localhost:9000'
+export const ServerInstanceAddress = 'https://facebook-clone-mern-hamza.herokuapp.com'
 
 export const getImage = (filename) => {
     return ServerInstanceAddress + '/media/retrieve/?filename=' + filename
