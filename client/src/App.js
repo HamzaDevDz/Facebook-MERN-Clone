@@ -26,7 +26,7 @@ function App() {
                            </React.Fragment>
                        )}
                 />
-                <Redirect to="/login" />
+                <Redirect from={'/*'} to="/login" status={200} />
             </Switch>
         </div>
         {/*<div className={'app'}>*/}
