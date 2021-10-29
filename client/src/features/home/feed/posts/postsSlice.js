@@ -9,10 +9,10 @@ const initialState = {
 }
 
 export const getPosts = createAsyncThunk(
-    'post/retrieve',
-    async (empty, thunkAPI) => {
+    'post/getPosts',
+    async (friends, thunkAPI) => {
         try {
-            const response = await axios.get(ServerInstanceAddress+"/post/retrieve").then(res => {
+            const response = await axios.post(ServerInstanceAddress+"/post/getPosts",friends).then(res => {
                 return res.data
             })
             return response

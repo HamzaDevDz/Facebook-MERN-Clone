@@ -26,8 +26,9 @@ export const Upload = () => {
         e.preventDefault()
         if(caption){
             let newPost = {
+                idUser: user._id,
                 username: user.username,
-                imgUser: user.imgUserName,
+                imgUserName: user.imgUserName,
                 caption: caption,
                 timestamp: Date.now(),
                 likes: [],

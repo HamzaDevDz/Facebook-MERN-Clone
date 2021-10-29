@@ -4,7 +4,6 @@ const router = express.Router();
 
 router.post('/upload', (req, res)=>{
     const dbPost = req.body
-    // console.log(dbPost)
     mongoPosts.create(dbPost, (err, data)=>{
         if(err){
             res.status(500).send(err)
@@ -15,17 +14,25 @@ router.post('/upload', (req, res)=>{
     })
 })
 
-router.get('/retrieve', (req, res)=>{
-    mongoPosts.find((err, data)=>{
-        if(err){
-            res.status(500).send(err)
-        }
-        else{
-            data.sort((b, a)=>{
-                return a.timestamp - b.timestamp
-            })
-            res.status(200).send(data)
-        }
+router.post('/getPosts', (req, res)=>{
+    // mongoPosts.find((err, data)=>{
+    //     if(err){
+    //         res.status(500).send(err)
+    //     }
+    //     else{
+    //         data.sort((b, a)=>{
+    //             return a.timestamp - b.timestamp
+    //         })
+    //         res.status(200).send(data)
+    //     }
+    // })
+    mongoPosts.find(
+        {idUser: {$in: [req.body.idUser, req.body.idFriends]}},
+        // {$or: [{idUser: {$in: req.body.idFriends}}, {idUser: req.body.idUser}]},
+    ).then(data => {
+        res.send(data).status(200)
+    }).catch(err => {
+        res.status(500).send(err)
     })
 })
 
