@@ -34,7 +34,7 @@ export const Messages = () => {
     }, [])
 
     useEffect(()=>{
-        console.log(discussions)
+        // console.log(discussions)
         discussions.forEach((d,i) => {
             const idUsers = {
                 idUser1 : user._id,

@@ -6,7 +6,7 @@
     width: 400px;
     margin: 5px;
     position: relative;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 .messages__discussion__information{
     width: 100%;
@@ -23,6 +23,15 @@
 }
 .messages__discussion__information__avatar{
     margin: 10px !important;
+    position: relative !important;
+}
+.messages__discussion__information__avatar__noneSaw{
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    /*border-radius: 50%;*/
+    /*background-color: darkred;*/
+    /*color: #FFFFFF;*/
 }
 .messages__discussion__information__exit{
     position: absolute !important;

@@ -1,28 +1,37 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import './Discussion.css'
 import {useDispatch, useSelector} from "react-redux";
 import {selectUser} from "../../../login/loginSlice";
 import Avatar from "@mui/material/Avatar";
 import {getImage} from "../../../../ServerInstance";
 import IconButton from "@mui/material/IconButton";
-import {addMessage, cleanDiscussion} from "../messagesSlice";
+import {addMessage, cleanDiscussion, resetSaw, selectSawMessages} from "../messagesSlice";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import FormControl from "@mui/material/FormControl";
 import SendIcon from "@mui/icons-material/Send";
+import Badge from "@mui/material/Badge";
+import MailIcon from '@mui/icons-material/Mail';
 
 export const Discussion = ({friend, messages, index}) => {
 
     const dispatch = useDispatch()
 
     const user = useSelector(selectUser)
+    const saw = useSelector(selectSawMessages(friend.id))
     const [message, setMessage] = useState('')
     const [reduced, setReduced] = useState(false)
 
-    return(
+    useEffect(()=>{
+        if(saw !== 0){
+            if(!reduced){
+                dispatch(resetSaw({idMessages: messages._id, idUser: user._id}))
+            }
+        }
+    }, [reduced])
 
+    return(
         <div key={'discussion-'+friend.id+'-'+user._id} className={'messages__discussion'}>
             <div className={'messages__discussion__information'} onClick={()=>{
-                console.log('click ')
                 if(reduced){
                     setReduced(false)
                 }else{
@@ -33,6 +42,21 @@ export const Discussion = ({friend, messages, index}) => {
                         className={'messages__discussion__information__avatar'}
                 />
                 {friend.firstName} {friend.name}
+                {
+                    saw !== 0 ?
+                        <Badge badgeContent={saw}
+                               color="success"
+                               className={'messages__discussion__information__avatar__noneSaw'}
+                               anchorOrigin={{
+                                   vertical: 'top',
+                                   horizontal: 'left',
+                               }}
+                        >
+                            <MailIcon color="action" />
+                        </Badge>
+                        :
+                        ''
+                }
                 <IconButton className={'messages__discussion__information__exit'}
                             color="success"
                             onClick={()=>{
@@ -86,7 +110,7 @@ export const Discussion = ({friend, messages, index}) => {
                                                     timestamp: Date.now(),
                                                     idUser: user._id,
                                                     likes: []
-                                                }
+                                                },
                                             }
                                             dispatch(addMessage(newMessage))
                                             setMessage('')

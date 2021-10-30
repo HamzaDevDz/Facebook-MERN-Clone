@@ -1,0 +1,16 @@
+.friendsBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: transparent;
+    position: fixed;
+    top: 70px;
+    right: 10px;
+    z-index: 1;
+    padding-bottom: 5px;
+}
+.friendsBox__title{
+    align-self: flex-start;
+    font-size: 1.2rem;
+    color: #65676B;
+}

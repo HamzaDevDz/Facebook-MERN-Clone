@@ -4,7 +4,7 @@ import {Login} from "./features/login/Login";
 import {SignUp} from "./features/login/SignUp/SignUp";
 import {Home} from "./features/home/Home";
 import {Header} from "./features/home/header/Header";
-import {FriendsBox} from "./features/home/friendsBox/FriendsBox";
+import {Friends} from "./features/home/friends/Friends";
 import {Messages} from "./features/home/messages/Messages";
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
                        render={()=>(
                            <React.Fragment>
                                <Header />
-                               <FriendsBox />
+                               <Friends />
                                <Home />
                                <Messages />
                            </React.Fragment>

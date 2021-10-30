@@ -39,7 +39,7 @@ export const getFriends = createAsyncThunk(
         }
     })
 
-export const friendsBoxSlice = createSlice({
+export const friendsSlice = createSlice({
     name: 'friendsBox',
     initialState,
     reducers: {},
@@ -51,9 +51,9 @@ export const friendsBoxSlice = createSlice({
     }
 })
 
-// export const {} = friendsBoxSlice.actions
+// export const {} = friendsSlice.actions
 
 export const selectFriends = state => state.friendsBox.friends
 
 
-export default friendsBoxSlice.reducer
+export default friendsSlice.reducer

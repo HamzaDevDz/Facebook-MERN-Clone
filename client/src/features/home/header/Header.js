@@ -28,7 +28,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import PersonAddDisabledOutlinedIcon from '@mui/icons-material/PersonAddDisabledOutlined';
 import Button from "@mui/material/Button";
 import {pusher} from "../../../ServerInstance";
-import {addFriend, getFriends, removeFriend} from "../friendsBox/friendsBoxSlice";
+import {addFriend, getFriends, removeFriend} from "../friends/friendsSlice";
 
 export const Header = () => {
 

@@ -48,6 +48,16 @@ export const synchMessages = createAsyncThunk(
         }
     })
 
+export const resetSaw = createAsyncThunk(
+    'messages/resetSaw',
+    async (idMessagesUser, thunkAPI) => {
+        try {
+            await axios.post(ServerInstanceAddress+"/messages/resetSaw", idMessagesUser)
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    })
+
 
 export const messagesSlice = createSlice({
     name: 'messages',
@@ -88,6 +98,16 @@ export const {cleanDiscussion, resetStatusUpDateDiscussions} = messagesSlice.act
 
 export const selectDiscussions = state => state.messages.discussions
 export const selectStatusUpDateDiscussions = state => state.messages.statusUpDateDiscussions
+export const selectSawMessages = (idFriend) => (state) => {
+    const index = state.messages.discussions.findIndex(d => {
+        if(d.friend.id === idFriend){
+            return true
+        }
+    })
+    if(index !== -1){
+        return state.messages.discussions[index].messages.users[0].saw
+    }
+}
 
 
 export default messagesSlice.reducer
